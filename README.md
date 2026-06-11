@@ -6,10 +6,9 @@
     - Every 5 in-game days, the chat recieves a message indicating the total days elapsed.
 
 - Custom music discs!
-    - USSR Anthem disc (craftable)
 
 - Custom Paintings!
-    - Featuring all sorts of soviet propaganda (for roleplay purposes)
+    - Featuring all sorts of art used for roleplay
     - And more!
  
 - Trash Can Multiblock
