@@ -1,14 +1,13 @@
 {
-	"asset_id": "omlet_rp:soviet_art/sputnik-first-long-shot",
+	"asset_id": "omlet_rp:commune_art/sputnik_first_longshot",
 	"width": 1,
 	"height": 2,
 	"title": {
-		"color": "dark_aqua",
-		"text": "The First Satellite"
-
+		"text": "The First Satellite",
+		"color": "dark_aqua"
 	},
 	"author": {
-		"color": "gray",
-		"text": "The Union of Soviet Socialist Republics"
+		"text": "The Union of Soviet Socialist Republics",
+		"color": "gray"
 	}
 }

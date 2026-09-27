@@ -1,14 +1,13 @@
 {
-	"asset_id": "omlet_rp:soviet_art/nuclear_soviet",
+	"asset_id": "omlet_rp:commune_art/nuclear_soviet",
 	"width": 1,
 	"height": 2,
 	"title": {
-		"color": "dark_aqua",
-		"text": "Glory to Soviet Science!"
-
+		"text": "Glory to Soviet Science!",
+		"color": "dark_aqua"
 	},
 	"author": {
-		"color": "gray",
-		"text": "The Union of Soviet Socialist Republics"
+		"text": "The Union of Soviet Socialist Republics",
+		"color": "gray"
 	}
 }

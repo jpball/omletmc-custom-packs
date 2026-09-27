@@ -3,12 +3,11 @@
 	"width": 5,
 	"height": 3,
 	"title": {
-		"color": "dark_aqua",
-		"text": "A Sunday Afternoon on the Island of La Grande Jatte"
-
+		"text": "A Sunday Afternoon on the Island of La Grande Jatte",
+		"color": "dark_aqua"
 	},
 	"author": {
-		"color": "gray",
-		"text": "George Seurat"
+		"text": "Georges Seurat",
+		"color": "gray"
 	}
 }

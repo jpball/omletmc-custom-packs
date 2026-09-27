@@ -3,11 +3,11 @@
 	"width": 1,
 	"height": 1,
 	"title": {
-		"color": "dark_aqua",
-		"text": "Dancing Frorg"
+		"text": "Dancing Frorg",
+		"color": "dark_aqua"
 	},
 	"author": {
-		"color": "gray",
-		"text": "Raymond The Goat"
+		"text": "Raymond The Goat",
+		"color": "gray"
 	}
 }

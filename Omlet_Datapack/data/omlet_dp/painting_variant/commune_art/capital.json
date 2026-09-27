@@ -1,14 +1,13 @@
 {
-	"asset_id": "omlet_rp:soviet_art/capital",
+	"asset_id": "omlet_rp:commune_art/capital",
 	"width": 2,
 	"height": 3,
 	"title": {
-		"color": "dark_aqua",
-		"text": "Capital"
-
+		"text": "Capital",
+		"color": "dark_aqua"
 	},
 	"author": {
-		"color": "gray",
-		"text": "The Union of Soviet Socialist Republics"
+		"text": "The Union of Soviet Socialist Republics",
+		"color": "gray"
 	}
 }

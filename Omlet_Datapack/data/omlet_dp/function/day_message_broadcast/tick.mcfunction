@@ -1,5 +1,4 @@
-# Initialize the prev_day and curr_day to the current in-game day count to ensure accurate tracking from the moment the datapack is loaded.
-execute store result score #omlet_dp omlet_dp.curr_day run time query day
+function omlet_dp:day_message_broadcast/query_day
 
-# A new day triggers when the prev_day and curr_day scores differ 
-execute if score #omlet_dp omlet_dp.prev_day < #omlet_dp omlet_dp.curr_day run function omlet_dp:day_message_broadcast/on_new_day
+# A new day starts whenever the day count changes (including via /time set)
+execute unless score #omlet_dp omlet_dp.curr_day = #omlet_dp omlet_dp.prev_day run function omlet_dp:day_message_broadcast/on_new_day

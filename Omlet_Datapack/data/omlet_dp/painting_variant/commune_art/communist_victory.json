@@ -1,14 +1,13 @@
 {
-	"asset_id": "omlet_rp:soviet_art/communist_victory",
+	"asset_id": "omlet_rp:commune_art/communist_victory",
 	"width": 6,
 	"height": 4,
 	"title": {
-		"color": "dark_aqua",
-		"text": "The Victory of Communism is Inevitable!"
-
+		"text": "The Victory of Communism is Inevitable!",
+		"color": "dark_aqua"
 	},
 	"author": {
-		"color": "gray",
-		"text": "The Union of Soviet Socialist Republics"
+		"text": "The Union of Soviet Socialist Republics",
+		"color": "gray"
 	}
 }

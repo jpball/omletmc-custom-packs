@@ -10,7 +10,7 @@
 		"id": "minecraft:music_disc_pigstep",
 		"components": {
 			"minecraft:jukebox_playable": "omlet_dp:ussr_anthem",
-			"minecraft:custom_name": " National Anthem of USSR "
+			"minecraft:item_name": "National Anthem of USSR"
 		}
 	}
 }

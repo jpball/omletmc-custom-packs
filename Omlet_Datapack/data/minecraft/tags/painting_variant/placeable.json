@@ -1,16 +1,17 @@
 {
-    "values": [
-        "omlet_dp:frog_dance",
-        "omlet_dp:rayfrog",
-        "omlet_dp:commune_art/communist_victory",
-        "omlet_dp:commune_art/all_for_the_front",
-        "omlet_dp:commune_art/capital",
-        "omlet_dp:commune_art/nuclear_soviet",
-        "omlet_dp:commune_art/sputnik_first_longshot",
-        "omlet_dp:commune_art/volunteer",
-        "omlet_dp:earthset",
-        "omlet_dp:commune_art/yuri_gargarin",
-        "omlet_dp:day_in_the_park",
-        "omlet_dp:nighthawks"
-    ]
+	"values": [
+		"omlet_dp:commune_art/all_for_the_front",
+		"omlet_dp:commune_art/capital",
+		"omlet_dp:commune_art/communist_victory",
+		"omlet_dp:commune_art/nuclear_soviet",
+		"omlet_dp:commune_art/sputnik_first_longshot",
+		"omlet_dp:commune_art/ussr_flag",
+		"omlet_dp:commune_art/volunteer",
+		"omlet_dp:commune_art/yuri_gargarin",
+		"omlet_dp:day_in_the_park",
+		"omlet_dp:earthset",
+		"omlet_dp:frog_dance",
+		"omlet_dp:nighthawks",
+		"omlet_dp:rayfrog"
+	]
 }

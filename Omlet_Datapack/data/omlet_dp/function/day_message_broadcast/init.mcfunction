@@ -1,13 +1,12 @@
 scoreboard objectives add omlet_dp.prev_day dummy
 scoreboard objectives add omlet_dp.curr_day dummy
 scoreboard objectives add omlet_dp.curr_day.mod_freq dummy
-
 scoreboard objectives add omlet_dp.config.day_msg_frequency dummy
-scoreboard players set #omlet_dp omlet_dp.config.day_msg_frequency 5
+scoreboard players set #ticks_per_day omlet_dp.curr_day 24000
 
-# Initialize the prev_day and curr_day to the current in-game day count to ensure accurate tracking from the moment the datapack is loaded.
-execute store result score #omlet_dp omlet_dp.prev_day run time query day
-execute store result score #omlet_dp omlet_dp.curr_day run time query day
+# Default to broadcasting every 5 days, without overwriting a frequency set via set_broadcast_frequency
+execute unless score #omlet_dp omlet_dp.config.day_msg_frequency matches 1.. run scoreboard players set #omlet_dp omlet_dp.config.day_msg_frequency 5
 
-# Calculate the modulo of the current day count with the message frequency to determine when to broadcast the day count message.
-scoreboard players operation #omlet_dp omlet_dp.curr_day.mod_freq %= #omlet_dp omlet_dp.config.day_msg_frequency
+# Start tracking from the current day so loading the pack doesn't trigger a broadcast
+function omlet_dp:day_message_broadcast/query_day
+scoreboard players operation #omlet_dp omlet_dp.prev_day = #omlet_dp omlet_dp.curr_day

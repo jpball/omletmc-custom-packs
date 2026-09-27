@@ -2,20 +2,19 @@
 	"type": "minecraft:crafting_shaped",
 	"category": "misc",
 	"group": "goat_horn",
-	"key": {
-		"#": "minecraft:tnt",
-		"X": "minecraft:goat_horn"
-	},
 	"pattern": [
 		"###",
 		"#X#",
 		"###"
 	],
+	"key": {
+		"#": "minecraft:tnt",
+		"X": "minecraft:goat_horn"
+	},
 	"result": {
+		"id": "minecraft:goat_horn",
 		"components": {
 			"minecraft:instrument": "omlet_dp:vboomhorn"
-		},
-		"count": 1,
-		"id": "minecraft:goat_horn"
+		}
 	}
 }

@@ -3,11 +3,11 @@
 	"width": 2,
 	"height": 3,
 	"title": {
-		"color": "dark_aqua",
-		"text": "Ray le Frog"
+		"text": "Ray le Frog",
+		"color": "dark_aqua"
 	},
 	"author": {
-		"color": "gray",
-		"text": "Raymond The Goat & Slum Dank"
+		"text": "Raymond The Goat & Slum Dank",
+		"color": "gray"
 	}
 }

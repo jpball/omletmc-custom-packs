@@ -1,14 +1,13 @@
 {
-	"asset_id": "omlet_rp:soviet_art/all_for_the_front",
+	"asset_id": "omlet_rp:commune_art/all_for_the_front",
 	"width": 1,
 	"height": 2,
 	"title": {
-		"color": "dark_aqua",
-		"text": "All for the Front"
-
+		"text": "All for the Front",
+		"color": "dark_aqua"
 	},
 	"author": {
-		"color": "gray",
-		"text": "The Union of Soviet Socialist Republics"
+		"text": "The Union of Soviet Socialist Republics",
+		"color": "gray"
 	}
 }

@@ -1,7 +1,5 @@
 {
-	"description": {
-		"translate": "Vine Boom Goat Horn"
-	},
+	"description": "Vine Boom Goat Horn",
 	"range": 256,
 	"sound_event": {
 		"sound_id": "omlet_rp:item.goat_horn.sound.vboom"

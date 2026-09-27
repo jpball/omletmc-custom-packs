@@ -3,12 +3,11 @@
 	"width": 15,
 	"height": 10,
 	"title": {
-		"color": "dark_aqua",
-		"text": "Earthset"
-
+		"text": "Earthset",
+		"color": "dark_aqua"
 	},
 	"author": {
-		"color": "gray",
-		"text": "Artemis II Crew"
+		"text": "Artemis II Crew",
+		"color": "gray"
 	}
 }

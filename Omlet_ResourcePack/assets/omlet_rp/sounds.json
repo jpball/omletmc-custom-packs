@@ -1,15 +1,14 @@
 {
-"item.goat_horn.sound.vboom": {
-	"sounds": [
-		{
-		"name": "omlet_rp:vboom"
-		}
-	]
+	"item.goat_horn.sound.vboom": {
+		"sounds": [
+			"omlet_rp:vboom"
+		]
 	},
 	"music_disc.ussr_anthem": {
 		"sounds": [
 			{
-			"name": "omlet_rp:records/ussr_anthem"
+				"name": "omlet_rp:records/ussr_anthem",
+				"stream": true
 			}
 		]
 	}

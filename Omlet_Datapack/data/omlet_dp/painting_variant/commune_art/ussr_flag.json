@@ -1,14 +1,13 @@
 {
-	"asset_id": "omlet_rp:soviet_art/flag-union-of-soviet-socialist-republics",
+	"asset_id": "omlet_rp:commune_art/ussr_flag",
 	"width": 3,
 	"height": 2,
 	"title": {
-		"color": "dark_aqua",
-		"text": "Flag of the Union of Soviet Socialist Republics"
-
+		"text": "Flag of the Union of Soviet Socialist Republics",
+		"color": "dark_aqua"
 	},
 	"author": {
-		"color": "gray",
-		"text": "The Union of Soviet Socialist Republics"
+		"text": "The Union of Soviet Socialist Republics",
+		"color": "gray"
 	}
 }
