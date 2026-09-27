@@ -1,0 +1,13 @@
+{
+	"asset_id": "omlet_rp:mcquarrie/droids_on_tatooine",
+	"width": 4,
+	"height": 2,
+	"title": {
+		"text": "C-3PO and R2-D2 on Tatooine",
+		"color": "dark_aqua"
+	},
+	"author": {
+		"text": "Ralph McQuarrie",
+		"color": "gray"
+	}
+}

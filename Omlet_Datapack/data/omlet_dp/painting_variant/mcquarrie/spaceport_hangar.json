@@ -1,0 +1,13 @@
+{
+	"asset_id": "omlet_rp:mcquarrie/spaceport_hangar",
+	"width": 4,
+	"height": 2,
+	"title": {
+		"text": "Spaceport Hangar",
+		"color": "dark_aqua"
+	},
+	"author": {
+		"text": "Ralph McQuarrie",
+		"color": "gray"
+	}
+}

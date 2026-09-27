@@ -1,0 +1,12 @@
+{
+    "entity.cat.purr": {
+		"sounds": [
+		{
+			"type": "file",
+			"name": "omlet_rp:mob/cat/cough_1"
+        }
+		],
+		"replace": true,
+		"subtitle": "subtitles.entity.cat.purr"
+	}
+}

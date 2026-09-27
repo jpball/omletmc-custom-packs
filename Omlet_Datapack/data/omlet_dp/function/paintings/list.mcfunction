@@ -12,5 +12,10 @@ function omlet_dp:paintings/list_entry {id:"omlet_dp:commune_art/yuri_gargarin",
 function omlet_dp:paintings/list_entry {id:"omlet_dp:day_in_the_park",title:"A Sunday Afternoon on the Island of La Grande Jatte",size:"5x3"}
 function omlet_dp:paintings/list_entry {id:"omlet_dp:earthset",title:"Earthset",size:"15x10"}
 function omlet_dp:paintings/list_entry {id:"omlet_dp:frog_dance",title:"Dancing Frorg",size:"1x1"}
+function omlet_dp:paintings/list_entry {id:"omlet_dp:mcquarrie/droids_on_tatooine",title:"C-3PO and R2-D2 on Tatooine",size:"4x2"}
+function omlet_dp:paintings/list_entry {id:"omlet_dp:mcquarrie/spaceport_hangar",title:"Spaceport Hangar",size:"4x2"}
+function omlet_dp:paintings/list_entry {id:"omlet_dp:mcquarrie/tron",title:"Tron",size:"4x3"}
 function omlet_dp:paintings/list_entry {id:"omlet_dp:nighthawks",title:"Nighthawks",size:"5x3"}
+function omlet_dp:paintings/list_entry {id:"omlet_dp:rage_comic",title:"Rage Comic",size:"2x2"}
 function omlet_dp:paintings/list_entry {id:"omlet_dp:rayfrog",title:"Ray le Frog",size:"2x3"}
+function omlet_dp:paintings/list_entry {id:"omlet_dp:weapons",title:"Weapons",size:"4x2"}

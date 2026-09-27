@@ -1,0 +1,13 @@
+{
+	"asset_id": "omlet_rp:mcquarrie/tron",
+	"width": 4,
+	"height": 3,
+	"title": {
+		"text": "Tron",
+		"color": "dark_aqua"
+	},
+	"author": {
+		"text": "Ralph McQuarrie",
+		"color": "gray"
+	}
+}

@@ -1,0 +1,13 @@
+{
+	"asset_id": "omlet_rp:weapons",
+	"width": 4,
+	"height": 2,
+	"title": {
+		"text": "Weapons",
+		"color": "dark_aqua"
+	},
+	"author": {
+		"text": "Zach Cregger",
+		"color": "gray"
+	}
+}

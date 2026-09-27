@@ -1,0 +1,13 @@
+{
+	"asset_id": "omlet_rp:rage_comic",
+	"width": 2,
+	"height": 2,
+	"title": {
+		"text": "Rage Comic",
+		"color": "dark_aqua"
+	},
+	"author": {
+		"text": "Anonymous",
+		"color": "gray"
+	}
+}

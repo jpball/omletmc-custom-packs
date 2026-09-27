@@ -11,7 +11,12 @@
 		"omlet_dp:day_in_the_park",
 		"omlet_dp:earthset",
 		"omlet_dp:frog_dance",
+		"omlet_dp:mcquarrie/droids_on_tatooine",
+		"omlet_dp:mcquarrie/spaceport_hangar",
+		"omlet_dp:mcquarrie/tron",
 		"omlet_dp:nighthawks",
-		"omlet_dp:rayfrog"
+		"omlet_dp:rage_comic",
+		"omlet_dp:rayfrog",
+		"omlet_dp:weapons"
 	]
 }
