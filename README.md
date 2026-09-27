@@ -14,4 +14,4 @@
 
 - Trash Can Multiblock
     - Build a trash can to incinerate all items transferred into the chest
-    - Glow item frame on top of a trapped chest, on top of a soul campfire
+    - Place a glow item frame on top of a trapped chest
