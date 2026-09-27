@@ -11,7 +11,9 @@
 - Custom Paintings!
     - Featuring all sorts of art used for roleplay
     - And more!
+    - Run `/function omlet_dp:paintings/list` to list them in chat; click one to receive it
 
 - Trash Can Multiblock
     - Build a trash can to incinerate all items transferred into the chest
-    - Place a glow item frame on top of a trapped chest
+    - Place a glow item frame holding a lava bucket on top of a trapped chest, with a redstone lamp beneath the chest
+    - The trash can only burns items while the redstone lamp is powered

@@ -1,9 +1,36 @@
 {
-	"condition": "minecraft:location_check",
-	"offsetY": -1,
-	"predicate": {
-		"block": {
-			"blocks": "minecraft:trapped_chest"
-		}
-	}
+  "terms": [
+    {
+      "type": "minecraft:location_check",
+      "offsetY": -2,
+      "predicate": {
+        "block": {
+          "blocks": "minecraft:redstone_lamp"
+        }
+      }
+    },
+    {
+      "type": "minecraft:location_check",
+      "offsetY": -1,
+      "predicate": {
+        "block": {
+          "blocks": "minecraft:barrel"
+        }
+      }
+    },
+    {
+      "type": "minecraft:entity_properties",
+      "entity": "this",
+      "predicate": {
+        "minecraft:entity_type": "minecraft:glow_item_frame",
+        "minecraft:slots": {
+          "contents": {
+            "items": "minecraft:lava_bucket",
+            "count": 1
+          }
+        }
+      }
+    }
+  ],
+  "type": "minecraft:all_of"
 }
