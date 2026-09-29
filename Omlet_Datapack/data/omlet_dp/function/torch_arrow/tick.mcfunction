@@ -1,0 +1,1 @@
+execute as @e[type=minecraft:arrow,nbt={inGround:1b,item:{components:{"minecraft:custom_data":{torch_arrow:1b}}}}] at @s run function omlet_dp:torch_arrow/place

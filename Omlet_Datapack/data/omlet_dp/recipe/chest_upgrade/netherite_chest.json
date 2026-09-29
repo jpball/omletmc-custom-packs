@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "omlet_tier_chest",
+  "pattern": [
+    "###",
+    "#C#",
+    "###"
+  ],
+  "key": {
+    "#": "minecraft:netherite_ingot",
+    "C": "minecraft:infested_stone_bricks"
+  },
+  "result": {
+    "id": "minecraft:infested_deepslate",
+    "count": 1,
+    "components": {
+      "minecraft:item_name": {
+        "text": "Netherite Chest",
+        "color": "#8A7F8A"
+      },
+      "minecraft:item_model": "omlet_rp:chest/netherite",
+      "minecraft:custom_data": {
+        "omlet_tier_chest": {
+          "tier": 4
+        }
+      }
+    }
+  }
+}

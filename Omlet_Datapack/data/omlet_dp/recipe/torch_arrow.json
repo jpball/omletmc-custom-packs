@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    "minecraft:arrow",
+    "minecraft:torch"
+  ],
+  "result": {
+    "id": "minecraft:arrow",
+    "count": 1,
+    "components": {
+      "minecraft:item_name": "Torch Arrow",
+      "minecraft:custom_data": { "torch_arrow": true }
+    }
+  }
+}

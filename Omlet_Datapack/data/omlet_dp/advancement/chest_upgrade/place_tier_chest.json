@@ -1,0 +1,35 @@
+{
+  "criteria": {
+    "place": {
+      "trigger": "minecraft:placed_block",
+      "conditions": {
+        "location": {
+          "type": "minecraft:all_of",
+          "terms": [
+            {
+              "type": "minecraft:location_check",
+              "predicate": {
+                "block": {
+                  "blocks": "#omlet_dp:tier_chest_placeholder"
+                }
+              }
+            },
+            {
+              "type": "minecraft:match_tool",
+              "predicate": {
+                "predicates": {
+                  "minecraft:custom_data": {
+                    "omlet_tier_chest": {}
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "rewards": {
+    "function": "omlet_dp:chest_upgrade/place/on_place"
+  }
+}

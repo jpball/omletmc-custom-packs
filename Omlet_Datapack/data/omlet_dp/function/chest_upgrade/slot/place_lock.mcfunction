@@ -1,0 +1,1 @@
+$item replace block ~ ~ ~ container.$(slot) with minecraft:gray_stained_glass_pane[minecraft:custom_data={omlet_ui:1b,omlet_ui_action:"lock"},minecraft:item_name={text:"Locked Slot",color:"dark_gray"},minecraft:lore=[{text:"Upgrade this chest to unlock more slots",color:"gray",italic:false}]]

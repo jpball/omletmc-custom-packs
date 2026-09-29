@@ -1,0 +1,1 @@
+$execute as @e[type=item,distance=..1.5,nbt={Item:{id:"minecraft:chest",count:1,components:{"minecraft:custom_name":{text:"$(name)"}}}},sort=nearest,limit=1] run data modify entity @s Item set from storage omlet_dp:chest_upgrade tmp.tier.item

@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "omlet_tier_chest",
+  "pattern": [
+    "###",
+    "#C#",
+    "###"
+  ],
+  "key": {
+    "#": "minecraft:gold_ingot",
+    "C": "minecraft:infested_stone"
+  },
+  "result": {
+    "id": "minecraft:infested_cobblestone",
+    "count": 1,
+    "components": {
+      "minecraft:item_name": {
+        "text": "Gold Chest",
+        "color": "#FAD64A"
+      },
+      "minecraft:item_model": "omlet_rp:chest/gold",
+      "minecraft:custom_data": {
+        "omlet_tier_chest": {
+          "tier": 2
+        }
+      }
+    }
+  }
+}

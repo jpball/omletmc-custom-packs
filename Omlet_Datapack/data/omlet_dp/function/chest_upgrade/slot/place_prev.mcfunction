@@ -1,0 +1,1 @@
+$item replace block ~ ~ ~ container.$(slot) with minecraft:arrow[minecraft:custom_data={omlet_ui:1b,omlet_ui_action:"prev"},minecraft:item_name={text:"◀ Previous Page",color:"yellow"},minecraft:lore=[{text:"Page $(display) of $(pages)",color:"gray",italic:false}],minecraft:item_model="minecraft:spectral_arrow"]

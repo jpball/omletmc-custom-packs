@@ -1,0 +1,10 @@
+{
+  "parent": "omlet_rp:block/chest/template",
+  "textures": {
+    "front": "omlet_rp:block/chest/netherite_front",
+    "side": "omlet_rp:block/chest/netherite_side",
+    "top": "omlet_rp:block/chest/netherite_top",
+    "bottom": "omlet_rp:block/chest/netherite_bottom",
+    "latch": "omlet_rp:block/chest/netherite_latch"
+  }
+}
