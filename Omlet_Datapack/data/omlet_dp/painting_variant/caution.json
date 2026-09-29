@@ -1,0 +1,9 @@
+{
+	"asset_id": "omlet_rp:caution",
+	"width": 3,
+	"height": 2,
+	"title": {
+		"text": "Caution",
+		"color": "dark_aqua"
+	}
+}

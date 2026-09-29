@@ -1,5 +1,8 @@
 {
 	"values": [
+		"omlet_dp:cat_end",
+		"omlet_dp:cat_without_hat",
+		"omlet_dp:caution",
 		"omlet_dp:commune_art/all_for_the_front",
 		"omlet_dp:commune_art/capital",
 		"omlet_dp:commune_art/communist_victory",
@@ -9,8 +12,10 @@
 		"omlet_dp:commune_art/volunteer",
 		"omlet_dp:commune_art/yuri_gargarin",
 		"omlet_dp:day_in_the_park",
+		"omlet_dp:doggo",
 		"omlet_dp:earthset",
 		"omlet_dp:frog_dance",
+		"omlet_dp:hate_this",
 		"omlet_dp:mcquarrie/droids_on_tatooine",
 		"omlet_dp:mcquarrie/spaceport_hangar",
 		"omlet_dp:mcquarrie/tron",
