@@ -1,7 +1,7 @@
 {
 	"pack": {
 		"description": "A custom resource pack created for the Omlet server",
-		"min_format": 69,
-		"max_format": 97
+		"min_format": 101,
+		"max_format": 121.0
 	}
 }
