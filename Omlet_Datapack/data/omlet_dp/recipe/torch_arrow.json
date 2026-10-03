@@ -10,6 +10,7 @@
     "count": 1,
     "components": {
       "minecraft:item_name": "Torch Arrow",
+      "item_model": "omlet_rp:torch_arrow",
       "minecraft:custom_data": { "torch_arrow": true }
     }
   }

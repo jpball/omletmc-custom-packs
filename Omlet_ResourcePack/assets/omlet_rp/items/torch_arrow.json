@@ -1,0 +1,16 @@
+{
+  "model": {
+    "type": "minecraft:composite",
+    "models": [
+      {
+        "type": "minecraft:model",
+        "model": "minecraft:item/arrow"
+      },
+      {
+        "type": "minecraft:model",
+        "model": "minecraft:block/torch"
+       
+      }
+    ]
+  }
+}
