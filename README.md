@@ -3,17 +3,26 @@
 ---
 ## Datapack Functionality
 - Day Counter Broadcast
-    - Every 5 in-game days, the chat receives a message indicating the total days elapsed.
-    - Change the interval with `/function omlet_dp:day_message_broadcast/set_broadcast_frequency {new_freq:<days>}`
+    - Every few in-game days, the chat receives a message showing how many days have passed.
 
 - Custom music discs!
 
 - Custom Paintings!
     - Featuring all sorts of art used for roleplay
     - And more!
-    - Run `/function omlet_dp:paintings/list` to list them in chat; click one to receive it
 
 - Trash Can Multiblock
-    - Build a trash can to incinerate all items transferred into the chest
-    - Place a glow item frame holding a lava bucket on top of a trapped chest, with a redstone lamp beneath the chest
+    - Build a trash can to destroy any items put into it
+    - Place a glow item frame holding a lava bucket on top of a barrel, with a redstone lamp beneath the barrel
     - The trash can only burns items while the redstone lamp is powered
+
+- Flatworld Portal
+    - Build an upright portal frame out of coarse dirt, 5 blocks wide along the bottom with a 3×3 opening
+    - Place a glow item frame on the middle block of the bottom, and put a diamond block in it to activate the portal
+    - Stand in the portal for a moment to travel between the overworld and the flatworld
+    - If there is no portal on the other side, one is built for you on a smooth stone platform
+    - Going back through takes you to the portal you came from
+    - Breaking the frame, or taking the diamond block out, turns the portal off
+
+---
+Commands, installation steps and technical details are in the [Developer Guide](docs/DEVELOPER_GUIDE.md).
