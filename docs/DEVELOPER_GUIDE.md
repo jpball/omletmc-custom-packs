@@ -115,6 +115,14 @@ The vanilla `entity.cat.purr` sound is replaced with `omlet_rp:mob/cat/cough_1`.
 
 A hidden challenge advancement, awarded when a player kills an entity while at exactly experience level 69. It is announced in chat.
 
+### Letter banner patterns
+
+There are 26 banner patterns, `omlet_dp:letter_a` to `omlet_dp:letter_z`, one for each letter.
+
+- They are **always available in the loom**, with no banner pattern item needed, because they are in the `minecraft:no_item_required` tag.
+- Names such as "Black Letter A" and "Light Blue Letter Q" come from the resource pack's `lang/en_us.json`. There is one entry per letter per dye colour, because the game adds the colour to the end of the translation key.
+- Each letter is a blocky white pixel letter that the game tints with the dye colour. On banners it is 15×21 pixels in the middle of the flag. The back of the flag shows it mirrored, like vanilla patterns. On shields it is a smaller 8×14 version.
+
 ### Trash can multiblock
 
 A block that deletes everything put into it.
@@ -211,6 +219,7 @@ All paths below are relative to `Omlet_Datapack/`.
 | `function/tick.json` | Runs `omlet_dp:tick` every game tick |
 | `instrument/goat_horns.json` | Adds the Vine Boom instrument to the goat horn instrument tag |
 | `painting_variant/placeable.json` | Lets all custom paintings appear when placing a random painting. **Add new paintings here** |
+| `banner_pattern/no_item_required.json` | Makes the letter banner patterns always available in the loom |
 
 ### Entry points — `data/omlet_dp/function/`
 
@@ -266,6 +275,12 @@ All paths below are relative to `Omlet_Datapack/`.
 | File | Purpose |
 |---|---|
 | `advancement/nice.json` | Hidden "Nice." challenge advancement for killing an entity while at level 69 |
+
+### Banner patterns — `banner_pattern/`
+
+| File | Purpose |
+|---|---|
+| `banner_pattern/letter_a.json` … `letter_z.json` | One pattern per letter: `asset_id` (texture `omlet_rp:letter_<letter>`) and `translation_key` (`block.omlet_dp.banner.letter_<letter>`) |
 
 ### Trash can — `function/multiblock/trash_can/` and `predicate/is_trashcan.json`
 
@@ -328,6 +343,9 @@ All paths below are relative to `Omlet_ResourcePack/`.
 | `assets/omlet_rp/sounds/vboom.ogg` | Vine Boom horn sound |
 | `assets/omlet_rp/sounds/records/ussr_anthem.ogg` | Music disc track |
 | `assets/omlet_rp/sounds/mob/cat/cough_1.ogg` | Replacement cat purr sound |
+| `assets/omlet_rp/textures/entity/banner/letter_*.png` | Banner textures for the 26 letter patterns (64×64; front face at x1–20, y1–40, mirrored copy on the back face at x22–41) |
+| `assets/omlet_rp/textures/entity/shield/letter_*.png` | Shield textures for the 26 letter patterns (64×64; face at x2–11, y2–21) |
+| `assets/omlet_rp/lang/en_us.json` | English names for the letter banner patterns, e.g. `block.omlet_dp.banner.letter_a.black` → "Black Letter A" (16 colours × 26 letters) |
 | `assets/omlet_rp/items/torch_arrow.json` | Item model for the torch arrow: the vanilla arrow with a torch model drawn over it |
 | `assets/omlet_rp/textures/painting/**/*.png` | One texture per painting variant, matching the datapack's `asset_id`s |
 | `assets/omlet_rp/textures/painting/frog_dance.png.mcmeta` | Makes the Frog Dance painting animate (1 tick per frame) |
