@@ -1,5 +1,5 @@
 {
-  "type": "minecraft:overworld",
+  "type": "minecraft:flatworld_type",
   "generator": {
     "type": "minecraft:flat",
     "settings": {
