@@ -1,5 +1,5 @@
 {
-  "type": "minecraft:flatworld_type",
+  "type": "omlet_dp:flatworld_type",
   "generator": {
     "type": "minecraft:flat",
     "settings": {
