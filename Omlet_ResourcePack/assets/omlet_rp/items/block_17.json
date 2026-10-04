@@ -1,0 +1,8 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "omlet_rp:item/block_17",
+    "tints": []
+  },
+  "hand_animation_on_swap": true
+}

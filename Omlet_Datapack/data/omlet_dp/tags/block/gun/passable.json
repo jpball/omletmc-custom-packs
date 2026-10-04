@@ -1,0 +1,22 @@
+{
+  "values": [
+    "#minecraft:replaceable",
+    "#minecraft:flowers",
+    "#minecraft:saplings",
+    "#minecraft:buttons",
+    "#minecraft:rails",
+    "#minecraft:wall_signs",
+    { "id": "minecraft:torch", "required": false },
+    { "id": "minecraft:wall_torch", "required": false },
+    { "id": "minecraft:soul_torch", "required": false },
+    { "id": "minecraft:soul_wall_torch", "required": false },
+    { "id": "minecraft:redstone_torch", "required": false },
+    { "id": "minecraft:redstone_wall_torch", "required": false },
+    { "id": "minecraft:redstone_wire", "required": false },
+    { "id": "minecraft:lever", "required": false },
+    { "id": "minecraft:tripwire", "required": false },
+    { "id": "minecraft:sugar_cane", "required": false },
+    { "id": "minecraft:cobweb", "required": false },
+    { "id": "minecraft:barrier", "required": false }
+  ]
+}
