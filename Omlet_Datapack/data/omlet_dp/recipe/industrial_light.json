@@ -1,0 +1,27 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"category": "building",
+	"pattern": [
+		"###",
+		"#G#",
+		"#R#"
+	],
+	"key": {
+		"#": "minecraft:black_concrete",
+		"G": "minecraft:glowstone",
+		"R": "minecraft:redstone"
+	},
+	"result": {
+		"id": "minecraft:item_frame",
+		"components": {
+			"minecraft:item_name": "Industrial Light",
+			"minecraft:item_model": "omlet_rp:industrial_light",
+			"minecraft:entity_data": {
+				"id": "minecraft:item_frame",
+				"Tags": ["omlet.industrial_light_placer"],
+				"Invisible": true,
+				"Fixed": true
+			}
+		}
+	}
+}
