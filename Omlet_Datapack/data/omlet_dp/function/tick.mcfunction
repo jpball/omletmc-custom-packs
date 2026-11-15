@@ -5,3 +5,4 @@ function omlet_dp:multiblock/flatworld_portal/tick
 function omlet_dp:gun/tick
 function omlet_dp:flickeringlight/tick
 function omlet_dp:car/tick
+function omlet_dp:player_saddle/tick

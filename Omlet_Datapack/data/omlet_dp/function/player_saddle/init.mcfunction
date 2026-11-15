@@ -1,0 +1,1 @@
+scoreboard objectives add omlet.id dummy
