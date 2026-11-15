@@ -1,40 +1,35 @@
-name: PR release
+name: Release
 
 on:
-  pull_request:
+  push:
     branches: [main]
-    types: [opened, synchronize, reopened]
 
 permissions:
   contents: write
 
 jobs:
   release:
-    if: github.event_name == 'workflow_dispatch' || github.head_ref == 'development'
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ github.token }}
-      TAG: pr-${{ github.event.pull_request.number }}
+      TZ: UTC
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.head_ref }}
 
       - name: Build zips
         run: |
           (cd Omlet_Datapack && zip -r ../omletsmp_datapack.zip pack.mcmeta data)
           (cd Omlet_ResourcePack && zip -r ../omletsmp_resourcepack.zip pack.mcmeta pack.png assets)
 
-      - name: Read version
-        run: echo "TITLE=OmletSMP Packs v$(cat VERSION)" >> "$GITHUB_ENV"
-
-      - name: Create or update release
+      - name: Set tag and title
         run: |
-          if ! gh release view "$TAG" >/dev/null 2>&1; then
-            gh release create "$TAG" --draft --target main \
-              --title "$TITLE" \
-              --notes "Built from PR #${{ github.event.pull_request.number }}"
-          else
-            gh release edit "$TAG" --title "$TITLE"
-          fi
-          gh release upload "$TAG" omletsmp_datapack.zip omletsmp_resourcepack.zip --clobber
+          echo "TAG=release-$(date +%F)" >> "$GITHUB_ENV"
+          echo "TITLE=OmletSMP Packs v$(cat VERSION)" >> "$GITHUB_ENV"
+
+      - name: Replace today's release
+        run: |
+          gh release delete "$TAG" --cleanup-tag --yes || true
+          gh release create "$TAG" --target "$GITHUB_SHA" \
+            --title "$TITLE" \
+            --notes "Built from ${GITHUB_SHA::7}" \
+            omletsmp_datapack.zip omletsmp_resourcepack.zip

@@ -196,7 +196,7 @@ For example, `/function omlet_dp:flatworld/return {targets:"@a", x:0, y:70, z:0}
 ├── Omlet_Datapack/            The datapack (namespace omlet_dp)
 ├── Omlet_ResourcePack/        The resource pack (namespace omlet_rp)
 ├── .github/workflows/
-│   └── release.yml            Builds draft release zips for PRs from development into main
+│   └── release.yml            Builds draft release zips for PRs from develop into main
 ├── docs/
 │   ├── DEVELOPER_GUIDE.md     This file
 │   └── screenshots/           Images used in the docs/README
