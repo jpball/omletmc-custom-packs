@@ -197,6 +197,7 @@ For example, `/function omlet_dp:flatworld/return {targets:"@a", x:0, y:70, z:0}
 ├── raw_assets/                Blockbench source models (.bbmodel), not part of either pack
 ├── versions/                  Release zips (git-ignored)
 ├── README.md                  Player-facing feature summary
+├── VERSION                    Release version, used to name GitHub releases
 ├── reload-files.sh            Copies both packs into a test world
 ├── .env                       Local overrides for reload-files.sh (git-ignored)
 └── .gitignore                 Ignores versions/ and *.env
