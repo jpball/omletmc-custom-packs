@@ -1,0 +1,16 @@
+{
+  "criteria": {
+    "joined": {
+      "trigger": "minecraft:tick"
+    }
+  },
+  "rewards": {
+    "recipes": [
+      "omlet_dp:industrial_light",
+      "omlet_dp:playersaddle",
+      "omlet_dp:torch_arrow",
+      "omlet_dp:ussr_anthem",
+      "omlet_dp:vineboomhorn"
+    ]
+  }
+}

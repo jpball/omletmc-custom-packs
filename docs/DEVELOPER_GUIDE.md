@@ -4,9 +4,9 @@ This repository holds the datapack and resource pack for the Omlet Minecraft ser
 
 - **Target game version:** Minecraft Java 26.3
 - **Datapack:** `Omlet_Datapack/` (namespace `omlet_dp`, pack formats 101–121)
-- **Resource pack:** `Omlet_ResourcePack/` (namespace `omlet_rp`, pack formats 69–97)
+- **Resource pack:** `Omlet_ResourcePack/` (namespace `omlet_rp`, pack formats 72–97.1)
 
-The two packs are designed to be used together. The datapack adds the gameplay, and the resource pack supplies the sounds, textures and models that gameplay refers to. Without the resource pack the features still work, but custom paintings show the missing texture, custom sounds are silent and the torch arrow looks like a normal arrow.
+The two packs are designed to be used together. The datapack adds the gameplay, and the resource pack supplies the sounds, textures and models that gameplay refers to. Without the resource pack the features still work, but custom paintings show the missing texture, custom sounds are silent, and the torch arrow, gun, cars, industrial light and player saddle show their base items (arrow, carrot on a stick, armor stand, item frame, leather chestplate) instead of their custom models.
 
 ---
 
@@ -31,7 +31,7 @@ The two packs are designed to be used together. The datapack adds the gameplay, 
 1. **Datapack:** copy the `Omlet_Datapack` folder (or a zip of it) into `<.minecraft>/saves/<World Name>/datapacks/`.
 2. **Resource pack:** copy the `Omlet_ResourcePack` folder (or a zip of it) into `<.minecraft>/resourcepacks/`, then enable it in *Options → Resource Packs*.
 3. **Restart the world.** Exit to the title screen and reopen it. A plain `/reload` is **not** enough the first time, because the flatworld dimension is only registered when the world loads. After that, `/reload` picks up changes to functions, recipes, predicates and so on.
-4. You should see **"Omlet Datapack loaded successfully!"** in green in chat. If you don't, check `/datapack list` and the game log for errors. A single invalid JSON file can stop the whole datapack loading.
+4. You should see **"Omlet Datapack loaded successfully!"** in light purple in chat, followed by the datapack version (e.g. `26.3_10.3`, set in `load.mcfunction`). If you don't, check `/datapack list` and the game log for errors. A single invalid JSON file can stop the whole datapack loading.
 
 When creating a new world you can instead add the datapack from the *Data Packs* button on the world creation screen.
 
@@ -46,7 +46,9 @@ When creating a new world you can instead add the datapack from the *Data Packs*
 
 ### Release zips
 
-Packaged releases are kept in `versions/`, for example `Omlet_Datapack_26.3_v1.1.zip` and `Omlet_ResourcePack_26.3_v1.1.zip`. This folder is git-ignored, so the zips only exist on the machine that built them. When zipping a pack yourself, `pack.mcmeta` must be at the **root** of the zip, not inside a subfolder.
+Locally built releases are kept in `versions/`. This folder is git-ignored, so new zips only exist on the machine that built them (the older `Omlet MC - Custom Packs v1.0.zip` was committed before the ignore rule). When zipping a pack yourself, `pack.mcmeta` must be at the **root** of the zip, not inside a subfolder.
+
+`.github/workflows/release.yml` builds release zips automatically. When a pull request into `main` is opened or updated **from the `develop` branch**, it zips both packs (`omletsmp_datapack.zip`, `omletsmp_resourcepack.zip`) and uploads them to a **draft** GitHub release tagged `pr-<PR number>`, replacing the zips on each push. Publish the draft by hand once the PR is merged.
 
 ### Developer install with `reload-files.sh`
 
@@ -115,7 +117,7 @@ There are 23 custom paintings. They are all in the `minecraft:placeable` paintin
 
 ### Cars
 
-- **Recipe (shapeless):** diamond + redstone + red dye → Mustang. Admins can also use `/loot give @s loot omlet_dp:car/mustang`.
+- **Getting a car:** cars can't currently be crafted (the Mustang recipe was removed). Admins can give one with `/loot give @s loot omlet_dp:car/mustang`, or run `/function omlet_dp:car/list` and click a car to spawn it where they're standing (`car/create {car:"<loot table>"}` does the same directly).
 - The Mustang item is an armor stand item whose `entity_data` tags the placed stand `omlet.car_new` and puts the car's name and model in its head slot. The stand is replaced by the car on the next tick.
 - Place it like an armor stand. It turns into a car facing away from you.
 - **Right-click** to get in (one driver per car), **sneak** to get out, **left-click** an empty car to pick it back up as an item.
@@ -123,8 +125,28 @@ There are 23 custom paintings. They are all in the `minecraft:placeable` paintin
 - **Sounds** (all vanilla): an engine rumble while someone's driving that rises in pitch with speed, a door closing when you get in, a horn on the **sprint** key, and a skid when you handbrake at speed.
 - The car falls when there's nothing under it, climbs 1-block steps and stops at walls 2 blocks high. Collision is only checked at the car's centre, so the front and back of the model can go into walls.
 - **Model position, size and rotation** come from the model's `display.fixed` in the resource pack (e.g. `models/block/ford_mustang.json`), because cars are `item_display`s in `"fixed"` mode. `translation` is in pixels (16 = 1 block, max ±80), `rotation` in degrees, and `scale` is at most 4. It can be edited in Blockbench's Display tab under the item frame slot. Changes apply to every car, including ones already placed, as soon as the resource pack is reloaded (F3+T). To adjust one placed car on top of that, edit it directly, e.g. `/data merge entity @n[tag=omlet.car] {transformation:{scale:[1.5f,1.5f,1.5f]}}`.
-- **Crafting:** a recipe can't output a loot table, so `recipe/mustang.json` gives a placeholder (an armor stand tagged `custom_data {omlet_car_recipe:true}`). The `car/crafted_mustang` advancement fires on crafting, clears the placeholders and gives the same number of Mustangs from the loot table, so the loot table is the only definition of the car.
-- **Adding another car:** copy `loot_table/car/mustang.json` and change the name and `item_model` in both places (the item itself and the head item inside `entity_data`). To make it craftable, also copy the recipe, the `car/crafted_mustang` advancement and the `crafted_mustang` / `give_mustang` functions, pointing them at the new recipe and loot table. Set the new model's position and size in its `display.fixed`.
+- **Crafting (currently disabled):** a recipe can't output a loot table, so crafting worked through a placeholder: `recipe/mustang.json` gave an armor stand tagged `custom_data {omlet_car_recipe:true}`, and the `car/crafted_mustang` advancement fired on crafting, cleared the placeholders and gave the same number of Mustangs from the loot table. The advancement and the `crafted_mustang` / `give_mustang` functions are still in place, so restoring `recipe/mustang.json` (with the id `omlet_dp:mustang`) turns crafting back on.
+- **Adding another car:** copy `loot_table/car/mustang.json` and change the name and `item_model` in both places (the item itself and the head item inside `entity_data`), then add a line for it to `car/list.mcfunction`. Set the new model's position and size in its `display.fixed`. To make it craftable, also add a recipe and copy the `car/crafted_mustang` advancement and the `crafted_mustang` / `give_mustang` functions, pointing them at the new recipe and loot table.
+
+### Industrial light (flickering lamp)
+
+A ceiling/wall/floor lamp that gives off light level 15 and flickers at random.
+
+- **Recipe (shaped):** 7 black concrete around a glowstone, with redstone in the bottom middle (`###` / `#G#` / `#R#`). Admins can use `/function omlet_dp:debug/give_industrial_light`.
+- The item is an invisible, fixed item frame (tagged `omlet.industrial_light_placer`) with the `omlet_rp:industrial_light` model. Place it on any face of a block, like an item frame. On the next tick the frame is replaced by the lamp: a `light[level=15]` block (waterlogged if placed in water), an `item_display` showing the model rotated to match the surface, and an `interaction` hitbox. If the block space is already taken, the item is dropped back.
+- **Flickering:** every 2–20 seconds the lamp goes dark for 1–6 ticks. Half the time it flickers again almost straight away, so flickers come in bursts.
+- **Sneak + right-click** switches the lamp off (no light, no flickering) or back on.
+- **Punch** to break it. It drops the item, except for players in creative. Placing a block into the lamp's space also breaks it and drops the item.
+
+### Player saddle
+
+A chestplate that lets another player ride on your back.
+
+- **Recipe (shaped):** saddle top middle, leather chestplate in the centre, end rod bottom middle, leather in the other 6 slots (`#-#` / `#o#` / `#_#`).
+- The result is a leather chestplate named "Player Saddle" with `custom_data {player_saddle:true}` and the `omlet_rp:player_saddle` model. It gives normal leather chestplate armour.
+- While a (non-spectator) player wears it in the chest slot, an `interaction` hitbox (0.6 × 1.2) follows just behind them. Another player **right-clicks** it to sit on a seat (`item_display`) behind the wearer's shoulders. Sneak to get off.
+- You can't ride your own saddle, ride one that's already taken, or mount while already riding something.
+- The hitbox is removed as soon as the saddle is taken off or the wearer logs out, and the seat is removed once its rider gets off.
 
 ### Cat purr replacement (resource pack only)
 
@@ -133,6 +155,12 @@ The vanilla `entity.cat.purr` sound is replaced with `omlet_rp:mob/cat/cough_1`.
 ### "Nice." advancement
 
 A hidden challenge advancement, awarded when a player kills an entity while at exactly experience level 69. It is announced in chat.
+
+### Recipe unlocking
+
+Every player has all the custom recipes unlocked in their recipe book. The invisible `omlet_dp:unlock_recipes` advancement is granted on the player's first tick in the world and unlocks them as its reward. `load.mcfunction` revokes it from everyone online on each load or `/reload`, so it fires again straight away and picks up any recipes added since. Players who were offline then get the new recipes after the next reload they're online for.
+
+**When adding a recipe, add its id to `advancement/unlock_recipes.json`.**
 
 ### Letter banner patterns
 
@@ -155,7 +183,7 @@ A block that deletes everything put into it.
 
 ### Flatworld dimension and portal
 
-The datapack adds a custom dimension, `omlet_dp:flatworld`. It is a superflat world with no features or lakes: a bedrock floor, 3 dirt and a grass layer on top (the grass surface is at Y = −60). Villages and abandoned camps can generate there.
+The datapack adds a custom dimension, `omlet_dp:flatworld`. It is a superflat world with no features or lakes: a bedrock floor at Y = 0, 4 dirt and a grass layer on top, so you stand at Y = 6. Villages and abandoned camps can generate there. Its dimension type, `omlet_dp:flatworld_type`, builds from Y 0 to 2031 and turns off surface slime spawning.
 
 **Building a portal**
 
@@ -179,7 +207,7 @@ The datapack adds a custom dimension, `omlet_dp:flatworld`. It is a superflat wo
 
 - Stand in the portal for **2 seconds**. The action bar shows "Travelling to the Flatworld…" or "…Overworld…". Stepping out cancels the trip.
 - You arrive in the other dimension at the **same X/Z**.
-- If there's no portal there, one is **built automatically at ground height**: the frame stands on a 5×3 layer of **smooth stone**, with the area in front and behind cleared so you can step off. The item frame on generated portals is fixed and invulnerable, so players can't take a free diamond block from it.
+- If there's no portal there, one is **built automatically at ground height**, facing the same way as the portal you left, with the area in front and behind cleared so you can step off. The item frame on generated portals is fixed and invulnerable, so players can't take a free diamond block from it.
 - The two portals are **linked**, so going back through takes you to the portal you came from.
 - After arriving you must **step out** of the portal before it will take you back, the same as vanilla nether portals.
 - Portals only work in the overworld and the flatworld.
@@ -196,6 +224,7 @@ Breaking any frame block, or taking the diamond block out, shuts the portal off.
 | `/function omlet_dp:multiblock/flatworld_portal/return_players {targets:"<selector or name>"}` | Same, for other players, e.g. `{targets:"@a"}`. Only affects players who are in the flatworld |
 | `/function omlet_dp:multiblock/flatworld_portal/disable_travel` | Stops portal travel **into** the flatworld. Leaving the flatworld always works |
 | `/function omlet_dp:multiblock/flatworld_portal/enable_travel` | Turns it back on. On by default, and the setting is kept across `/reload` |
+| `/function omlet_dp:debug/emergency_flatworld_evacuation {targets:"<selector or name>"}` | Shortcut for `return_players` |
 
 `return_me` and `return_players` use `spreadplayers` to find a safe surface block within 32 blocks. If none is found (for example in open ocean), the player is left high up with Slow Falling.
 
@@ -207,9 +236,12 @@ Breaking any frame block, or taking the diamond block out, shuts the portal off.
 .
 ├── Omlet_Datapack/            The datapack (namespace omlet_dp)
 ├── Omlet_ResourcePack/        The resource pack (namespace omlet_rp)
+├── .github/workflows/
+│   └── release.yml            Builds draft release zips for PRs from develop into main
 ├── docs/
 │   ├── DEVELOPER_GUIDE.md     This file
 │   └── screenshots/           Images used in the docs/README
+├── raw_assets/                Blockbench source models (.bbmodel), not part of either pack
 ├── versions/                  Release zips (git-ignored)
 ├── README.md                  Player-facing feature summary
 ├── reload-files.sh            Copies both packs into a test world
@@ -244,8 +276,17 @@ All paths below are relative to `Omlet_Datapack/`.
 
 | File | Purpose |
 |---|---|
-| `load.mcfunction` | Runs each feature's `init` and prints the "loaded successfully" message |
+| `load.mcfunction` | Runs each feature's `init`, revokes `unlock_recipes` so it re-fires, and prints the "loaded successfully" message |
 | `tick.mcfunction` | Runs each feature's `tick` every game tick |
+
+### Debug and admin shortcuts — `function/debug/`
+
+| File | Purpose |
+|---|---|
+| `give_gun.mcfunction` | Gives the gun |
+| `give_industrial_light.mcfunction` | Gives an industrial light |
+| `list_paintings.mcfunction` | Same as `paintings/list` |
+| `emergency_flatworld_evacuation.mcfunction` | Macro `{targets}`, same as `flatworld_portal/return_players` |
 
 ### Day counter — `function/day_message_broadcast/`
 
@@ -299,7 +340,6 @@ All paths below are relative to `Omlet_Datapack/`.
 | `function/gun/shoot.mcfunction` | Plays the muzzle sound and smoke, then starts `ray` from the player's eyes |
 | `function/gun/ray.mcfunction` | Moves the bullet forward 0.25 blocks per step (recursive). Stops at a block not in `gun/passable` or inside an entity's hitbox |
 | `function/gun/hit_block.mcfunction` / `hit_entity.mcfunction` | Impact effects. `hit_entity` deals 6 `minecraft:arrow` damage credited to the shooter |
-| `function/debug/give_gun.mcfunction` | Gives the gun |
 | `tags/block/gun/passable.json` | Blocks bullets pass through: everything in `car/passable`, plus cobwebs and barriers |
 | `tags/entity_type/gun/not_targets.json` | Entities bullets pass through |
 
@@ -311,6 +351,8 @@ A car is one `item_display` (`omlet.car`) showing the model, with an `interactio
 |---|---|
 | `function/car/init.mcfunction` | Creates the car scoreboards |
 | `function/car/tick.mcfunction` | Sets up newly placed cars, handles clicks on hitboxes, drives every car, and removes hitboxes left by a car killed some other way |
+| `function/car/list.mcfunction` | `/function omlet_dp:car/list`: prints every car as a clickable chat line that spawns it. **Add a line here when adding a car** |
+| `function/car/create.mcfunction` | Macro `{car}`: spawns the car from `loot_table/car/<car>` where the caller stands, through the same `setup` as placing the item |
 | `function/car/setup.mcfunction` | Replaces a placed armor stand with the car: an `item_display` (`"fixed"` mode, so the model's `display.fixed` applies) with the head item, facing away from the player, plus the hitbox and the seat |
 | `function/car/drive.mcfunction` | Reads the driver's keys (via `read_controls`), updates `omlet.car_speed`, plays the horn/skid/engine sounds, steers, applies gravity, then calls `move` |
 | `function/car/move.mcfunction` / `move_to.mcfunction` | Macro `{step}`: moves the car `step` blocks forward, stepping up 1 block or stopping at a wall |
@@ -319,18 +361,55 @@ A car is one `item_display` (`omlet.car`) showing the model, with an `interactio
 | `function/car/clicked.mcfunction` | Right-click: seats the player if the car has no driver |
 | `function/car/punched.mcfunction` / `pick_up.mcfunction` | Left-click on an empty car: drops the car item again and removes the car |
 | `loot_table/car/mustang.json` | The Mustang item |
-| `recipe/mustang.json` | Crafts a placeholder Mustang (custom_data `omlet_car_recipe:true`) |
-| `advancement/car/crafted_mustang.json` | `recipe_crafted` trigger for `omlet_dp:mustang`, runs `car/crafted_mustang` |
+| `recipe/mustang.json` | **Removed.** Crafted a placeholder Mustang (custom_data `omlet_car_recipe:true`) |
+| `advancement/car/crafted_mustang.json` | `recipe_crafted` trigger for `omlet_dp:mustang`, runs `car/crafted_mustang`. Never fires while the recipe is removed |
 | `function/car/crafted_mustang.mcfunction` / `give_mustang.mcfunction` | Revokes the advancement, clears the player's placeholders and gives that many Mustangs from the loot table |
 | `predicate/controls/*.json` | Player input checks (forward, backward, left, right, `handbrake` = jump, `horn` = sprint) |
 | `predicate/car/in_car.json` | Matches entities riding an item_display; car hitboxes and seats without one are removed |
 | `tags/block/car/passable.json` | Blocks a car drives and falls through. `gun/passable` includes it |
+
+### Industrial light — `function/flickeringlight/`
+
+A lamp is an `item_display` and an `interaction`, both tagged `omlet.industrial_light`, at a `light` block. Functions that take "the block centre" are run `align xyz positioned ~.5 ~.5 ~.5`.
+
+| File | Purpose |
+|---|---|
+| `recipe/industrial_light.json`, `loot_table/industrial_light.json` | The lamp item (an invisible fixed item frame tagged `omlet.industrial_light_placer`). The loot table is used to drop and give it; keep the two in sync |
+| `init.mcfunction` | Creates the light scoreboards |
+| `tick.mcfunction` | Turns placed item frames into lamps, handles right-clicks and punches on hitboxes, and runs `lamp_tick` for every lamp |
+| `summon_light.mcfunction` | Run as a placed item frame: places the light block, summons the display (rotated from the frame's facing) and hitbox (a thin slab on floors and ceilings, a cube on walls), then removes the frame. Calls `cancel_place` if the space is taken |
+| `cancel_place.mcfunction` | Drops the item back and removes the frame |
+| `lamp_tick.mcfunction` | Breaks the lamp if its light block was replaced, otherwise counts down to the next flicker |
+| `next_flicker.mcfunction` | Waits 40–400 ticks before the next flicker |
+| `turn_off.mcfunction` / `turn_on.mcfunction` | One flicker: dark for 1–6 ticks, then back on, with a 50% chance of another flicker 2–8 ticks later |
+| `set_level.mcfunction` | Macro `{level}`: sets the light block's level, keeping it waterlogged if it was |
+| `use.mcfunction` | Right-click on a hitbox: toggles the lamp only if the player is sneaking (`predicate/is_sneaking.json`) |
+| `toggle.mcfunction`, `switch_off.mcfunction`, `switch_on.mcfunction` | Switches the lamp off (tag `omlet.light_disabled`) or back on |
+| `hit.mcfunction` | Punch on a hitbox: `remove` for creative players, `break` otherwise |
+| `break.mcfunction` / `remove.mcfunction` | `remove` restores air or water and kills the lamp's entities; `break` also drops the item |
+
+### Player saddle — `function/player_saddle/`
+
+Each player gets a unique `omlet.id`. The wearer's hitbox and seat carry the same id. Every tick all hitboxes and seats are tagged `omlet.stale`; the ones still in use have it removed, and the rest are killed.
+
+| File | Purpose |
+|---|---|
+| `recipe/playersaddle.json` | The Player Saddle (leather chestplate with `custom_data {player_saddle:true}`) |
+| `init.mcfunction` | Creates `omlet.id` |
+| `tick.mcfunction` | Gives players an id, marks hitboxes and seats stale, runs `wearer_tick` for each wearer (rotated to their yaw with pitch 0), and kills whatever is still stale |
+| `wearer_tick.mcfunction` | Moves the wearer's hitbox and seat behind them, or summons a hitbox if they don't have one |
+| `init_hitbox.mcfunction` / `init_seat.mcfunction` | Tag a new hitbox or seat and give it the wearer's id |
+| `hitbox_tick.mcfunction` | Keeps the hitbox 0.3 up and 0.4 behind the wearer, and calls `click` when it's right-clicked |
+| `click.mcfunction` | Runs `mount` as the player who clicked |
+| `mount.mcfunction` | Unless it's the wearer, the player is already riding, or the seat is taken: summons a seat 0.9 up and 0.4 behind the wearer and mounts the player on it |
+| `seat_tick.mcfunction` | Keeps the seat in place. It stays alive only while it has a rider |
 
 ### Advancement
 
 | File | Purpose |
 |---|---|
 | `advancement/nice.json` | Hidden "Nice." challenge advancement for killing an entity while at level 69 |
+| `advancement/unlock_recipes.json` | Invisible (no `display`). `minecraft:tick` trigger whose reward unlocks every custom recipe. Revoked for online players in `load.mcfunction` so it re-fires. **Add new recipes here** |
 
 ### Banner patterns — `banner_pattern/`
 
@@ -349,27 +428,32 @@ A car is one `item_display` (`omlet.car`) showing the model, with an `interactio
 
 ### Flatworld — `dimension/`, `predicate/flatworld_portal/` and `function/multiblock/flatworld_portal/`
 
-Many portal files come in `_x` and `_z` pairs, for portals facing along the X or the Z axis. The portal's **anchor** is the middle bottom block of the opening, where the glow item frame sits. All offsets are measured from there.
+Portals face along either the X or the Z axis. The portal's **anchor** is the middle bottom block of the opening, where the glow item frame sits, and all offsets are measured from there. Instead of separate `_x` and `_z` functions, the shape of each axis (the coordinate ranges of the opening, frame and cleared space, and the particle spread) is kept in `storage omlet_dp:flatworld_portal axis.x` / `axis.z`, and the shape-dependent functions are macros that take it.
 
 | File | Purpose |
 |---|---|
-| `dimension/flatworld.json` | Defines `omlet_dp:flatworld`, a superflat generator (bedrock, dirt and grass, no features or lakes, villages and abandoned camps allowed) |
+| `dimension/flatworld.json` | Defines `omlet_dp:flatworld`, a superflat generator (bedrock, 4 dirt and grass, no features or lakes, villages and abandoned camps allowed) |
+| `dimension_type/flatworld_type.json` | The flatworld's dimension type: Y 0–2031, overworld sky, normal day cycle, no surface slimes |
 | `predicate/flatworld_portal/frame_x.json`, `frame_z.json` | True if the 14 coarse dirt frame blocks around the anchor are intact |
 | `predicate/flatworld_portal/empty_x.json`, `empty_z.json` | True if the 3×3 opening is all air. Used together with `frame_*` before activating |
-| `init.mcfunction` | Creates the portal scoreboards. Enables travel by default, without overwriting an existing setting |
-| `tick.mcfunction` | The main loop: activation, portal upkeep, clean-up of old-design portals and stray portal light, cooldowns, and travel |
+| `predicate/flatworld_portal/has_key.json` | A glow item frame holding a diamond block |
+| `predicate/flatworld_portal/in_portal.json` | Standing in `light[level=11]`, i.e. inside an active portal |
+| `predicate/flatworld_portal/travel_blocked.json` | The player is heading to the flatworld while travel there is disabled |
+| `init.mcfunction` | Creates the portal scoreboards, enables travel by default (without overwriting an existing setting), removes objectives from older versions, and stores the axis shapes |
+| `tick.mcfunction` | The main loop: activation, portal upkeep, cooldowns, and travel |
+| `with_axis.mcfunction` | Macro `{run}`, run as a portal's item frame: runs `flatworld_portal/<run>` with that portal's axis shape |
 | `try_activate.mcfunction` | Run at an upward glow item frame holding a diamond block. Checks the frame and opening for both axes, and only works in the overworld or flatworld |
-| `activate_x/z.mcfunction` | Fills the opening with `light[level=11]`, tags the item frame as a portal, plays effects and shows the green message |
-| `portal_tick_x/z.mcfunction` | Run for each active portal every tick: deactivates it if the diamond is gone or the frame is broken, refills emptied light blocks and shows particles |
-| `deactivate_x/z.mcfunction` | Removes the light blocks, shows the red "broken" message and untags the frame. Removes the item frame (without a drop) on generated portals |
-| `build_x/z.mcfunction` | Builds a complete active portal at the destination: clears space, lays the smooth stone layer, frame and light, and summons a fixed glow item frame |
-| `travel/start.mcfunction` | A player stepped into a portal: reads the portal's position, axis and link into the player's scores, checks whether travel is disabled, starts the timer and force-loads the destination |
-| `travel/tick.mcfunction` | Runs each tick while a player waits: cancels if they step out or after 200 ticks, shows the action bar, and calls `arrive` after 40 ticks |
-| `travel/load_args.mcfunction` | Copies the player's travel scores into `storage omlet_dp:flatworld_portal args` for the macro functions |
-| `travel/arrive.mcfunction` | Macro. Waits until the destination is loaded, then finds the destination portal: the linked one first, then any portal in the same X/Z column, otherwise builds one at ground height. Then links both portals, teleports the player and sets their cooldown |
-| `travel/forceload.mcfunction`, `travel/unforceload.mcfunction` | Macros that add or remove a force-load on the 5×5 blocks around the destination |
+| `activate.mcfunction` | Macro (axis shape). Fills the opening with `light[level=11]`, tags the item frame `omlet.portal` and `omlet.portal_<axis>`, plays effects and shows the green message |
+| `portal_tick.mcfunction` | Macro (axis shape), run for each active portal every tick: deactivates it if the diamond is gone or the frame is broken, refills emptied light blocks and shows particles |
+| `deactivate.mcfunction` | Macro (axis shape). Removes the light blocks, shows the red "broken" message and untags the frame. Removes the item frame (without a drop) on generated portals |
+| `build.mcfunction` | Macro (axis shape). Builds a complete active portal at the destination: clears space, places the frame and light, and summons a fixed glow item frame |
+| `travel/start.mcfunction` | A player stepped into a portal: stores the portal's position, where it leads and the Y of its linked portal in the player's scores, checks whether travel is disabled, starts the timer and force-loads the destination |
+| `travel/tick.mcfunction` | Runs each tick while a player waits: cancels if they step out, fails if travel is disabled or after 200 ticks, shows the action bar, and calls `arrive` from 40 ticks |
+| `travel/with_args.mcfunction` | Macro `{run}`: copies the player's travel scores into `storage omlet_dp:flatworld_portal args` (`x`, `y`, `z`, `target_y`, `src`, `dim`) and runs `travel/<run>` with them |
+| `travel/arrive.mcfunction` | Macro (travel args). Waits until the destination is loaded, then picks the portal in the same X/Z column closest to the target Y, otherwise builds one at ground height. Then links both portals, teleports the player and sets their cooldown |
+| `travel/forceload.mcfunction`, `travel/unforceload.mcfunction` | Macros (travel args) that add or remove a force-load on the 5×5 blocks around the destination |
 | `travel/cancel.mcfunction` | Stops a trip: releases the force-load and removes the travel tag |
-| `travel/blocked.mcfunction` | Action-bar message when travel to the flatworld is disabled. Also sets the cooldown so it doesn't repeat every tick |
+| `travel/fail.mcfunction` | Macro `{message}`: shows the reason in red on the action bar, sets the cooldown so it doesn't repeat every tick, and cancels the trip |
 | `enable_travel.mcfunction`, `disable_travel.mcfunction` | Admin toggles for travel into the flatworld |
 | `return_me.mcfunction`, `return_players.mcfunction` | Admin commands to send yourself or other players back to the overworld |
 | `return/player.mcfunction` | Cancels any trip in progress and stores the player's X/Z for `teleport` |
@@ -379,7 +463,7 @@ Many portal files come in `_x` and `_z` pairs, for portals facing along the X or
 
 1. A player standing in `light[level=11]`, with an active portal item frame within 4 blocks and no cooldown, runs `travel/start`.
 2. Over the next 40 ticks the destination chunks are force-loaded.
-3. `travel/arrive` waits for `execute if loaded`, which covers both blocks and entities. It then finds or builds the destination portal, stores each portal's Y in the other's `omlet.portal_link` score, and teleports the player onto the destination item frame.
+3. `travel/arrive` waits for `execute if loaded`, which covers both blocks and entities. It then finds or builds the destination portal, stores each portal's Y in the other's `omlet.portal_link` score, and teleports the player onto the destination item frame. A new portal is built along the same axis as the one being left.
 4. The player gets `omlet.portal_cooldown`, which is removed once they are no longer standing in portal light.
 
 Linked portals always share X/Z, so a link only needs the other portal's Y.
@@ -392,7 +476,7 @@ All paths below are relative to `Omlet_ResourcePack/`.
 
 | File | Purpose |
 |---|---|
-| `pack.mcmeta` | Pack description and supported resource pack formats (69–97) |
+| `pack.mcmeta` | Pack description and supported resource pack formats (72–97.1) |
 | `pack.png` | Icon shown in the resource pack list |
 | `assets/minecraft/sounds.json` | Replaces the vanilla `entity.cat.purr` sound with the cat cough |
 | `assets/omlet_rp/sounds.json` | Defines `item.goat_horn.sound.vboom` and `music_disc.ussr_anthem` (streamed) |
@@ -407,6 +491,8 @@ All paths below are relative to `Omlet_ResourcePack/`.
 | `assets/omlet_rp/models/item/block_17.json`, `textures/item/block_17_tex.png` | The gun's Blockbench model and texture |
 | `assets/omlet_rp/items/ford_mustang.json` | Item model for the Mustang car (`omlet_rp:ford_mustang`) |
 | `assets/omlet_rp/models/block/ford_mustang.json`, `textures/block/mustang_tex.png` | The Mustang's Blockbench model and texture |
+| `assets/omlet_rp/items/industrial_light.json`, `models/block/industrial_lamp.json`, `textures/block/industrial_lamp.png` | The industrial light's item model, Blockbench model and texture |
+| `assets/omlet_rp/items/player_saddle.json`, `models/item/player_saddle.json`, `textures/item/player_saddle.png` | The player saddle's item model, flat item model and texture |
 | `assets/omlet_rp/textures/painting/**/*.png` | One texture per painting variant, matching the datapack's `asset_id`s |
 | `assets/omlet_rp/textures/painting/frog_dance.png.mcmeta` | Makes the Frog Dance painting animate (1 tick per frame) |
 
@@ -421,15 +507,17 @@ All paths below are relative to `Omlet_ResourcePack/`.
 | `omlet.day` | fake players | `#current` and `#previous` (current and last seen day), `#frequency` (broadcast interval in days), `#ticks_per_day` (24000), `#mod` (`day % frequency`, temporary) |
 | `omlet.portal` | fake players | `#travel_enabled` (1/0), and temporary values such as `#dest_y` and `#ok` |
 | `omlet.portal_x/y/z` | players | Position of the portal the player is travelling from |
-| `omlet.portal_axis` | players | 0 = X axis, 1 = Z axis |
 | `omlet.portal_dest` | players | 1 = going to the flatworld, 0 = going to the overworld |
+| `omlet.portal_target` | players | The Y to look for the destination portal at: the linked portal's Y if there is one, otherwise the source portal's Y |
 | `omlet.portal_timer` | players | Ticks spent waiting in the portal |
-| `omlet.portal_link` | portal item frames / players | On a portal: the Y of its linked portal. On a player: the Y to look for at the destination |
-| `omlet.portal_linked` | players | 1 if the source portal had a link |
+| `omlet.portal_link` | portal item frames | The Y of the linked portal in the other dimension |
 | `omlet.gun_used` | players | Right-clicks with a carrot on a stick since the last tick (`minecraft.used` stat) |
 | `omlet.gun_cooldown` | players | Ticks until the gun can fire again |
 | `omlet.gun` | fake players | `#steps` (bullet steps left), `#2` and `#mod`, temporary |
 | `omlet.car_speed` | car item_displays | Speed in hundredths of a block per tick, negative when reversing |
+| `omlet.light_timer` | lamp item_displays | Ticks until the lamp next flickers off or back on |
+| `omlet.light` | fake players | `#creative`, `#sneaking`, `#burst`, temporary |
+| `omlet.id` | players, saddle hitboxes and seats | Unique player id; hitboxes and seats carry their wearer's. `#next` (last id given out), `#id` and `#found`, temporary |
 | `omlet.car` | fake players | `#cycle` (counts 0–3 every tick, spaces out repeating sounds); `#throttle`, `#steer`, `#brake`, `#horn`, `#driver`, `#count` (cars still to give after crafting), temporary |
 
 **Entity tags**
@@ -445,11 +533,17 @@ All paths below are relative to `Omlet_ResourcePack/`.
 | `omlet.gun_shooter` | player | The player firing, only during a single shot |
 | `omlet.car_new` | armor stand | A car just placed, set up on the next tick |
 | `omlet.car`, `omlet.car_hitbox`, `omlet.car_seat` | item_display / interaction / interaction | A car, and the click hitbox and driver's seat riding it |
-| `omlet.car_this`, `omlet.car_drop`, `omlet.car_new_part` | various | Temporary, only during a single function call |
+| `omlet.car_this`, `omlet.car_drop`, `omlet.car_new_part`, `omlet.car_spawning` | various | Temporary, only during a single function call |
+| `omlet.industrial_light_placer` | item frame | A just-placed industrial light, turned into a lamp on the next tick |
+| `omlet.industrial_light` | item_display / interaction | A lamp's model and its hitbox |
+| `omlet.light_off` | lamp item_display | Currently in a flicker |
+| `omlet.light_disabled` | lamp item_display | Switched off by a player |
+| `omlet.saddle_hitbox`, `omlet.saddle_seat` | interaction / item_display | A player saddle's click hitbox and seat |
+| `omlet.stale`, `omlet.new_seat`, `omlet.new` | various | Temporary, only during a single tick or function call |
 
 **Storage**
 
-`omlet_dp:flatworld_portal` holds `args` (travel macro arguments) and `return` (X/Z for the return commands).
+`omlet_dp:flatworld_portal` holds `axis.x` / `axis.z` (portal shape per axis, set in `init`), `args` (travel macro arguments) and `return` (X/Z for the return commands).
 
 `omlet_dp:car` holds `step`, the distance a car moves this tick (macro argument for `car/move`).
 
@@ -491,6 +585,7 @@ All paths below are relative to `Omlet_ResourcePack/`.
 ## Known issues
 
 - **Force-loading:** portal travel adds and then removes a force-load on the destination chunks. If an admin had force-loaded those exact chunks with `/forceload`, a trip will remove that force-load.
+- **Tall flatworld portals:** `travel/arrive` only looks for existing portals between Y −64 and 319, but the flatworld goes up to Y 2031. A flatworld portal built above Y 319 is never found as a destination, so trips from the overworld build a new portal at ground level instead of linking to it.
 
 ---
 ## Credits
