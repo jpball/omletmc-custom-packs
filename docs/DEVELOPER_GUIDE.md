@@ -107,6 +107,12 @@ There are 23 custom paintings. They are all in the `minecraft:placeable` paintin
 - **Recipe (shapeless):** arrow + torch → a "Torch Arrow". This is an arrow tagged with `custom_data {torch_arrow:true}` and using the `omlet_rp:torch_arrow` item model, which draws an arrow with a torch over it.
 - When a fired torch arrow lands, it places a torch where it hit. It places a standing torch if there's ground below, otherwise a wall torch facing away from the block it hit. A xylophone note plays and the arrow is removed. If no torch can be placed there, the arrow stays as normal.
 
+### Gun
+
+- Get one with `/function omlet_dp:debug/give_gun`. It is a carrot on a stick tagged with `custom_data {omlet_gun:true}` and using the `omlet_rp:block_17` item model.
+- Right-click to fire. Holding right-click fires automatically, about 5 shots a second. Each shot is instant (hitscan) with a range of 64 blocks, deals 6 damage to the first mob or player it hits, and leaves a trail of crit particles.
+- Bullets pass through grass, flowers, torches and other non-solid blocks but stop at solid blocks. They ignore items, display entities, item frames and other non-mob entities.
+
 ### Cat purr replacement (resource pack only)
 
 The vanilla `entity.cat.purr` sound is replaced with `omlet_rp:mob/cat/cough_1`.
@@ -270,6 +276,20 @@ All paths below are relative to `Omlet_Datapack/`.
 | `function/torch_arrow/tick.mcfunction` | Finds landed torch arrows (`inGround:1b`) and runs `place` at each one |
 | `function/torch_arrow/place.mcfunction` | Places a standing or wall torch, plays a sound and removes the arrow |
 
+### Gun — `function/gun/` and `tags/*/gun/`
+
+| File | Purpose |
+|---|---|
+| `function/gun/init.mcfunction` | Creates the gun scoreboards |
+| `function/gun/tick.mcfunction` | Counts down cooldowns and runs `try_shoot` for players who right-clicked a carrot on a stick |
+| `function/gun/try_shoot.mcfunction` | Checks the player is holding the gun and isn't on cooldown, then fires |
+| `function/gun/shoot.mcfunction` | Plays the muzzle sound and smoke, then starts `ray` from the player's eyes |
+| `function/gun/ray.mcfunction` | Moves the bullet forward 0.25 blocks per step (recursive). Stops at a block not in `gun/passable` or inside an entity's hitbox |
+| `function/gun/hit_block.mcfunction` / `hit_entity.mcfunction` | Impact effects. `hit_entity` deals 6 `minecraft:arrow` damage credited to the shooter |
+| `function/debug/give_gun.mcfunction` | Gives the gun |
+| `tags/block/gun/passable.json` | Blocks bullets pass through |
+| `tags/entity_type/gun/not_targets.json` | Entities bullets pass through |
+
 ### Advancement
 
 | File | Purpose |
@@ -347,6 +367,8 @@ All paths below are relative to `Omlet_ResourcePack/`.
 | `assets/omlet_rp/textures/entity/shield/letter_*.png` | Shield textures for the 26 letter patterns (64×64; face at x2–11, y2–21) |
 | `assets/omlet_rp/lang/en_us.json` | English names for the letter banner patterns, e.g. `block.omlet_dp.banner.letter_a.black` → "Black Letter A" (16 colours × 26 letters) |
 | `assets/omlet_rp/items/torch_arrow.json` | Item model for the torch arrow: the vanilla arrow with a torch model drawn over it |
+| `assets/omlet_rp/items/block_17.json` | Item model for the gun (`omlet_rp:block_17`) |
+| `assets/omlet_rp/models/item/block_17.json`, `textures/item/block_17_tex.png` | The gun's Blockbench model and texture |
 | `assets/omlet_rp/textures/painting/**/*.png` | One texture per painting variant, matching the datapack's `asset_id`s |
 | `assets/omlet_rp/textures/painting/frog_dance.png.mcmeta` | Makes the Frog Dance painting animate (1 tick per frame) |
 
@@ -368,6 +390,9 @@ All paths below are relative to `Omlet_ResourcePack/`.
 | `omlet.portal_timer` | players | Ticks spent waiting in the portal |
 | `omlet.portal_link` | portal item frames / players | On a portal: the Y of its linked portal. On a player: the Y to look for at the destination |
 | `omlet.portal_linked` | players | 1 if the source portal had a link |
+| `omlet.gun_used` | players | Right-clicks with a carrot on a stick since the last tick (`minecraft.used` stat) |
+| `omlet.gun_cooldown` | players | Ticks until the gun can fire again |
+| `omlet.gun` | fake players | `#steps` (bullet steps left), `#2` and `#mod`, temporary |
 
 **Entity tags**
 
@@ -379,6 +404,7 @@ All paths below are relative to `Omlet_ResourcePack/`.
 | `omlet.portal_travel` | player | Currently waiting in a portal |
 | `omlet.portal_cooldown` | player | Must step out of portal light before travelling again |
 | `omlet.portal_src`, `omlet.portal_dest`, `omlet.portal_candidate` | glow item frame | Temporary markers used inside a single function call |
+| `omlet.gun_shooter` | player | The player firing, only during a single shot |
 
 **Storage**
 

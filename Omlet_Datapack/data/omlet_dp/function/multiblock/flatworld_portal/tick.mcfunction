@@ -5,11 +5,6 @@ execute as @e[type=glow_item_frame,tag=!omlet.portal] if items entity @s content
 execute as @e[type=glow_item_frame,tag=omlet.portal,tag=omlet.portal_x] at @s align xyz run function omlet_dp:multiblock/flatworld_portal/portal_tick_x
 execute as @e[type=glow_item_frame,tag=omlet.portal,tag=omlet.portal_z] at @s align xyz run function omlet_dp:multiblock/flatworld_portal/portal_tick_z
 
-# Remove portals from the old 4-wide design, and any portal light left without a portal
-execute as @e[type=marker,tag=omlet.portal] at @s align xyz run fill ~-1 ~ ~-1 ~2 ~2 ~1 minecraft:air replace minecraft:light[level=11]
-kill @e[type=marker,tag=omlet.portal]
-execute as @a at @s if block ~ ~ ~ minecraft:light[level=11] unless entity @e[type=glow_item_frame,tag=omlet.portal,distance=..4] run fill ~-3 ~-3 ~-3 ~3 ~3 ~3 minecraft:air replace minecraft:light[level=11]
-
 # Players must step out of a portal before they can use one again
 execute as @a[tag=omlet.portal_cooldown] at @s unless block ~ ~ ~ minecraft:light[level=11] run tag @s remove omlet.portal_cooldown
 
