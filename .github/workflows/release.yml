@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   release:
-    if: github.head_ref == 'development'
+    if: github.event_name == 'workflow_dispatch' || github.head_ref == 'development'
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ github.token }}
