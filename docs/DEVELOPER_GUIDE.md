@@ -168,52 +168,18 @@ A block that deletes everything put into it.
 
 ![Trash can](screenshots/trashcan-multiblock.png)
 
-### Flatworld dimension and portal
+### Flatworld dimension
 
 The datapack adds a custom dimension, `omlet_dp:flatworld`. It is a superflat world with no features or lakes: a bedrock floor at Y = 0, 4 dirt and a grass layer on top, so you stand at Y = 6. Villages and abandoned camps can generate there. Its dimension type, `omlet_dp:flatworld_type`, builds from Y 0 to 2031 and turns off surface slime spawning.
 
-**Building a portal**
-
-1. Build an upright frame out of **coarse dirt**, facing along either the X or the Z axis:
-   - bottom row: **5 blocks**, corners included
-   - sides: 3 blocks tall each
-   - top row: 3 blocks, and the top corners are optional
-   - the opening is 3 wide by 3 tall and must be empty
-2. Place a **glow item frame facing up** on the **middle block of the bottom row**, and put a **diamond block** in it.
-3. The portal lights up and shows particles, and **"Flatworld portal activated!"** (green) appears in chat.
-
-```
- . C C C .        C = coarse dirt   . = optional corner
- C       C
- C       C        (3 x 3 opening)
- C   F   C        F = glow item frame + diamond block (facing up)
- C C C C C
-```
-
-**Travelling**
-
-- Stand in the portal for **2 seconds**. The action bar shows "Travelling to the Flatworld…" or "…Overworld…". Stepping out cancels the trip.
-- You arrive in the other dimension at the **same X/Z**.
-- If there's no portal there, one is **built automatically at ground height**, facing the same way as the portal you left, with the area in front and behind cleared so you can step off. The item frame on generated portals is fixed and invulnerable, so players can't take a free diamond block from it.
-- The two portals are **linked**, so going back through takes you to the portal you came from.
-- After arriving you must **step out** of the portal before it will take you back, the same as vanilla nether portals.
-- Portals only work in the overworld and the flatworld.
-
-**Breaking a portal**
-
-Breaking any frame block, or taking the diamond block out, shuts the portal off. **"Flatworld portal broken!"** (red) appears in chat. The item frame of a generated portal is removed without dropping its diamond block.
-
-**Admin commands**
+There is no way in for players by themselves. Admins move them with two commands:
 
 | Command | What it does |
 |---|---|
-| `/function omlet_dp:multiblock/flatworld_portal/return_me` | Sends you from the flatworld to the overworld surface at the same X/Z |
-| `/function omlet_dp:multiblock/flatworld_portal/return_players {targets:"<selector or name>"}` | Same, for other players, e.g. `{targets:"@a"}`. Only affects players who are in the flatworld |
-| `/function omlet_dp:multiblock/flatworld_portal/disable_travel` | Stops portal travel **into** the flatworld. Leaving the flatworld always works |
-| `/function omlet_dp:multiblock/flatworld_portal/enable_travel` | Turns it back on. On by default, and the setting is kept across `/reload` |
-| `/function omlet_dp:debug/emergency_flatworld_evacuation {targets:"<selector or name>"}` | Shortcut for `return_players` |
+| `/function omlet_dp:flatworld/send {targets:"<selector or name>"}` | Sends players to the flatworld, standing on the surface at (within a block of) the X/Z they're at. Players already there are left alone |
+| `/function omlet_dp:flatworld/return {targets:"<selector or name>", x:<x>, y:<y>, z:<z>}` | Sends players in the flatworld to their spawn point: their bed, respawn anchor or `/spawnpoint`, in whichever dimension that is. Players who don't have one go to `x y z` in the overworld, normally the world spawn. Players not in the flatworld are left alone |
 
-`return_me` and `return_players` use `spreadplayers` to find a safe surface block within 32 blocks. If none is found (for example in open ocean), the player is left high up with Slow Falling.
+For example, `/function omlet_dp:flatworld/return {targets:"@a", x:0, y:70, z:0}`. Commands can't read the world spawn, which is why it has to be passed in.
 
 ---
 
@@ -273,7 +239,6 @@ All paths below are relative to `Omlet_Datapack/`.
 | `give_gun.mcfunction` | Gives the gun |
 | `give_industrial_light.mcfunction` | Gives an industrial light |
 | `list_paintings.mcfunction` | Same as `paintings/list` |
-| `emergency_flatworld_evacuation.mcfunction` | Macro `{targets}`, same as `flatworld_portal/return_players` |
 
 ### Day counter — `function/day_message_broadcast/`
 
@@ -383,47 +348,16 @@ Each player gets a unique `omlet.id`. The wearer's hitbox and seat carry the sam
 | `create_trashcan.mcfunction` | Adds the `omlet.trash_can` tag and shows "Trash can created!" to players within 8 blocks |
 | `activate_trashcan.mcfunction` | Clears the barrel's items and shows flame particles |
 
-### Flatworld — `dimension/`, `predicate/flatworld_portal/` and `function/multiblock/flatworld_portal/`
-
-Portals face along either the X or the Z axis. The portal's **anchor** is the middle bottom block of the opening, where the glow item frame sits, and all offsets are measured from there. Instead of separate `_x` and `_z` functions, the shape of each axis (the coordinate ranges of the opening, frame and cleared space, and the particle spread) is kept in `storage omlet_dp:flatworld_portal axis.x` / `axis.z`, and the shape-dependent functions are macros that take it.
+### Flatworld — `dimension/`, `dimension_type/` and `function/flatworld/`
 
 | File | Purpose |
 |---|---|
 | `dimension/flatworld.json` | Defines `omlet_dp:flatworld`, a superflat generator (bedrock, 4 dirt and grass, no features or lakes, villages and abandoned camps allowed) |
 | `dimension_type/flatworld_type.json` | The flatworld's dimension type: Y 0–2031, overworld sky, normal day cycle, no surface slimes |
-| `predicate/flatworld_portal/frame_x.json`, `frame_z.json` | True if the 14 coarse dirt frame blocks around the anchor are intact |
-| `predicate/flatworld_portal/empty_x.json`, `empty_z.json` | True if the 3×3 opening is all air. Used together with `frame_*` before activating |
-| `predicate/flatworld_portal/has_key.json` | A glow item frame holding a diamond block |
-| `predicate/flatworld_portal/in_portal.json` | Standing in `light[level=11]`, i.e. inside an active portal |
-| `predicate/flatworld_portal/travel_blocked.json` | The player is heading to the flatworld while travel there is disabled |
-| `init.mcfunction` | Creates the portal scoreboards, enables travel by default (without overwriting an existing setting), removes objectives from older versions, and stores the axis shapes |
-| `tick.mcfunction` | The main loop: activation, portal upkeep, cooldowns, and travel |
-| `with_axis.mcfunction` | Macro `{run}`, run as a portal's item frame: runs `flatworld_portal/<run>` with that portal's axis shape |
-| `try_activate.mcfunction` | Run at an upward glow item frame holding a diamond block. Checks the frame and opening for both axes, and only works in the overworld or flatworld |
-| `activate.mcfunction` | Macro (axis shape). Fills the opening with `light[level=11]`, tags the item frame `omlet.portal` and `omlet.portal_<axis>`, plays effects and shows the green message |
-| `portal_tick.mcfunction` | Macro (axis shape), run for each active portal every tick: deactivates it if the diamond is gone or the frame is broken, refills emptied light blocks and shows particles |
-| `deactivate.mcfunction` | Macro (axis shape). Removes the light blocks, shows the red "broken" message and untags the frame. Removes the item frame (without a drop) on generated portals |
-| `build.mcfunction` | Macro (axis shape). Builds a complete active portal at the destination: clears space, places the frame and light, and summons a fixed glow item frame |
-| `travel/start.mcfunction` | A player stepped into a portal: stores the portal's position, where it leads and the Y of its linked portal in the player's scores, checks whether travel is disabled, starts the timer and force-loads the destination |
-| `travel/tick.mcfunction` | Runs each tick while a player waits: cancels if they step out, fails if travel is disabled or after 200 ticks, shows the action bar, and calls `arrive` from 40 ticks |
-| `travel/with_args.mcfunction` | Macro `{run}`: copies the player's travel scores into `storage omlet_dp:flatworld_portal args` (`x`, `y`, `z`, `target_y`, `src`, `dim`) and runs `travel/<run>` with them |
-| `travel/arrive.mcfunction` | Macro (travel args). Waits until the destination is loaded, then picks the portal in the same X/Z column closest to the target Y, otherwise builds one at ground height. Then links both portals, teleports the player and sets their cooldown |
-| `travel/forceload.mcfunction`, `travel/unforceload.mcfunction` | Macros (travel args) that add or remove a force-load on the 5×5 blocks around the destination |
-| `travel/cancel.mcfunction` | Stops a trip: releases the force-load and removes the travel tag |
-| `travel/fail.mcfunction` | Macro `{message}`: shows the reason in red on the action bar, sets the cooldown so it doesn't repeat every tick, and cancels the trip |
-| `enable_travel.mcfunction`, `disable_travel.mcfunction` | Admin toggles for travel into the flatworld |
-| `return_me.mcfunction`, `return_players.mcfunction` | Admin commands to send yourself or other players back to the overworld |
-| `return/player.mcfunction` | Cancels any trip in progress and stores the player's X/Z for `teleport` |
-| `return/teleport.mcfunction` | Macro. Teleports into the overworld, then `spreadplayers` onto a safe surface block. Falls back to Slow Falling |
-
-**How a trip works**
-
-1. A player standing in `light[level=11]`, with an active portal item frame within 4 blocks and no cooldown, runs `travel/start`.
-2. Over the next 40 ticks the destination chunks are force-loaded.
-3. `travel/arrive` waits for `execute if loaded`, which covers both blocks and entities. It then finds or builds the destination portal, stores each portal's Y in the other's `omlet.portal_link` score, and teleports the player onto the destination item frame. A new portal is built along the same axis as the one being left.
-4. The player gets `omlet.portal_cooldown`, which is removed once they are no longer standing in portal light.
-
-Linked portals always share X/Z, so a link only needs the other portal's Y.
+| `function/flatworld/send.mcfunction` | Macro `{targets}`. Uses `spreadplayers` in the flatworld centred on each player, which puts them on the highest block there |
+| `function/flatworld/return.mcfunction` | Macro `{targets, x, y, z}`. Stores the fallback position in `storage omlet_dp:flatworld fallback` and runs `return/player` for each target in the flatworld |
+| `function/flatworld/return/player.mcfunction` | Builds the destination in `storage omlet_dp:flatworld spawn`: the player's `respawn` data (`dimension` and `pos`, 1 block up so they stand on the bed or anchor) if they have one, otherwise the fallback |
+| `function/flatworld/return/teleport.mcfunction` | Macro `{dimension, x, y, z, up}`: teleports the player there |
 
 ---
 
@@ -460,12 +394,6 @@ All paths below are relative to `Omlet_ResourcePack/`.
 | Objective | Holder | Meaning |
 |---|---|---|
 | `omlet.day` | fake players | `#day` (current day), `#last_day` (day seen on the previous tick), `#frequency` (broadcast interval in days), `#ticks_per_day` (24000), `#mod` (`day % frequency`, temporary) |
-| `omlet.portal` | fake players | `#travel_enabled` (1/0), and temporary values such as `#dest_y` and `#ok` |
-| `omlet.portal_x/y/z` | players | Position of the portal the player is travelling from |
-| `omlet.portal_dest` | players | 1 = going to the flatworld, 0 = going to the overworld |
-| `omlet.portal_target` | players | The Y to look for the destination portal at: the linked portal's Y if there is one, otherwise the source portal's Y |
-| `omlet.portal_timer` | players | Ticks spent waiting in the portal |
-| `omlet.portal_link` | portal item frames | The Y of the linked portal in the other dimension |
 | `omlet.gun_used` | players | Right-clicks with a carrot on a stick since the last tick (`minecraft.used` stat) |
 | `omlet.gun_cooldown` | players | Ticks until the gun can fire again |
 | `omlet.gun` | fake players | `#steps` (bullet steps left), `#2` and `#mod`, temporary |
@@ -477,11 +405,6 @@ All paths below are relative to `Omlet_ResourcePack/`.
 | Tag | On | Meaning |
 |---|---|---|
 | `omlet.trash_can` | glow item frame | An active trash can |
-| `omlet.portal`, `omlet.portal_x` / `omlet.portal_z` | glow item frame | An active flatworld portal and the axis it faces |
-| `omlet.portal_generated` | glow item frame | The portal was built automatically, so its frame is fixed and is removed when the portal breaks |
-| `omlet.portal_travel` | player | Currently waiting in a portal |
-| `omlet.portal_cooldown` | player | Must step out of portal light before travelling again |
-| `omlet.portal_src`, `omlet.portal_dest`, `omlet.portal_candidate` | glow item frame | Temporary markers used inside a single function call |
 | `omlet.gun_shooter` | player | The player firing, only during a single shot |
 | `omlet.industrial_light_placer` | item frame | A just-placed industrial light, turned into a lamp on the next tick |
 | `omlet.industrial_light` | item_display / interaction | A lamp's model and its hitbox |
@@ -492,7 +415,7 @@ All paths below are relative to `Omlet_ResourcePack/`.
 
 **Storage**
 
-`omlet_dp:flatworld_portal` holds `axis.x` / `axis.z` (portal shape per axis, set in `init`), `args` (travel macro arguments) and `return` (X/Z for the return commands).
+`omlet_dp:flatworld` holds `fallback` and `spawn`, the destinations used by `flatworld/return`.
 
 ---
 
@@ -509,7 +432,7 @@ All paths below are relative to `Omlet_ResourcePack/`.
 
 - Each feature lives in its own folder with an `init` (called from `load.mcfunction`) and a `tick` (called from `tick.mcfunction`).
 - Start each function file with a comment saying who it runs **as** and **at**, and what arguments it takes if it's a macro.
-- Prefix scoreboards and tags by feature, e.g. `omlet.portal_*` or `omlet.gun_*`.
+- Prefix scoreboards and tags by feature, e.g. `omlet.gun_*` or `omlet.light_*`.
 - Update `README.md` (for players) and this guide (for developers) when adding a feature.
 
 ---
@@ -531,5 +454,4 @@ All paths below are relative to `Omlet_ResourcePack/`.
 
 ## Known issues
 
-- **Force-loading:** portal travel adds and then removes a force-load on the destination chunks. If an admin had force-loaded those exact chunks with `/forceload`, a trip will remove that force-load.
-- **Tall flatworld portals:** `travel/arrive` only looks for existing portals between Y −64 and 319, but the flatworld goes up to Y 2031. A flatworld portal built above Y 319 is never found as a destination, so trips from the overworld build a new portal at ground level instead of linking to it.
+None at the moment.

@@ -39,13 +39,8 @@ For Minecraft Java 26.3. Install both packs together: the datapack adds the feat
     - Place a glow item frame holding a lava bucket on top of a barrel, with a redstone lamp beneath the barrel
     - The trash can only burns items while the redstone lamp is powered
 
-- Flatworld Portal
-    - Build an upright portal frame out of coarse dirt, 5 blocks wide along the bottom with a 3×3 opening
-    - Place a glow item frame on the middle block of the bottom, and put a diamond block in it to activate the portal
-    - Stand in the portal for a moment to travel between the overworld and the flatworld
-    - If there is no portal on the other side, one is built for you at ground level
-    - Going back through takes you to the portal you came from
-    - Breaking the frame, or taking the diamond block out, turns the portal off
+- Flatworld
+    - A separate superflat world, with villages, that admins can send players to and bring them back from
 
 ---
 Commands, installation steps and technical details are in the [Developer Guide](docs/DEVELOPER_GUIDE.md).
