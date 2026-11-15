@@ -237,6 +237,7 @@ All paths below are relative to `Omlet_Datapack/`.
 | File | Purpose |
 |---|---|
 | `help.mcfunction` | `/function omlet_dp:debug/help`: lists every debug and admin function with what it does. Debug functions run when clicked; admin commands are put in the chat box to fill in. **Add a line here when adding a debug or admin function** |
+| `items.mcfunction` | `/function omlet_dp:debug/items`: lists every custom item. Hover to see one, click to get it (torch arrows come in 16s; paintings open the painting list). The items are copies of the recipe results: **keep them in sync, and add a line here when adding a custom item** |
 | `give_gun.mcfunction` | Gives the gun |
 | `give_industrial_light.mcfunction` | Gives an industrial light |
 | `list_paintings.mcfunction` | Same as `paintings/list` |

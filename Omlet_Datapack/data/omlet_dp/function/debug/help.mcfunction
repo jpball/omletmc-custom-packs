@@ -2,6 +2,7 @@
 # Prints every debug and admin function with what it does. Click a debug function to run it; click an admin command to
 # put it in the chat box, ready to fill in its arguments. Add a line here when adding a debug or admin function
 tellraw @s {"text":"Omlet Datapack debug functions (click to run):","color":"gold","bold":true}
+tellraw @s [{"text":" • debug/items","color":"aqua","click_event":{"action":"run_command","command":"/function omlet_dp:debug/items"},"hover_event":{"action":"show_text","value":"Click to run"}},{"text":" - Lists every custom item. Click one to get it","color":"gray"}]
 tellraw @s [{"text":" • debug/give_gun","color":"aqua","click_event":{"action":"run_command","command":"/function omlet_dp:debug/give_gun"},"hover_event":{"action":"show_text","value":"Click to run"}},{"text":" - Gives you the gun (right-click to fire)","color":"gray"}]
 tellraw @s [{"text":" • debug/give_industrial_light","color":"aqua","click_event":{"action":"run_command","command":"/function omlet_dp:debug/give_industrial_light"},"hover_event":{"action":"show_text","value":"Click to run"}},{"text":" - Gives you an Industrial Light","color":"gray"}]
 tellraw @s [{"text":" • debug/list_paintings","color":"aqua","click_event":{"action":"run_command","command":"/function omlet_dp:debug/list_paintings"},"hover_event":{"action":"show_text","value":"Click to run"}},{"text":" - Lists every custom painting. Click one to get it","color":"gray"}]
