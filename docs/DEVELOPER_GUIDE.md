@@ -236,6 +236,7 @@ All paths below are relative to `Omlet_Datapack/`.
 
 | File | Purpose |
 |---|---|
+| `help.mcfunction` | `/function omlet_dp:debug/help`: lists every debug and admin function with what it does. Debug functions run when clicked; admin commands are put in the chat box to fill in. **Add a line here when adding a debug or admin function** |
 | `give_gun.mcfunction` | Gives the gun |
 | `give_industrial_light.mcfunction` | Gives an industrial light |
 | `list_paintings.mcfunction` | Same as `paintings/list` |
@@ -434,6 +435,7 @@ All paths below are relative to `Omlet_ResourcePack/`.
 - Start each function file with a comment saying who it runs **as** and **at**, and what arguments it takes if it's a macro.
 - Prefix scoreboards and tags by feature, e.g. `omlet.gun_*` or `omlet.light_*`.
 - Update `README.md` (for players) and this guide (for developers) when adding a feature.
+- Add new debug and admin functions to `debug/help.mcfunction`.
 
 ---
 
