@@ -1,0 +1,35 @@
+name: PR release
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    if: github.head_ref == 'develop'
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TAG: pr-${{ github.event.pull_request.number }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Build zips
+        run: |
+          (cd Omlet_Datapack && zip -r ../omletsmp_datapack.zip pack.mcmeta data)
+          (cd Omlet_ResourcePack && zip -r ../omletsmp_resourcepack.zip pack.mcmeta pack.png assets)
+
+      - name: Create or update release
+        run: |
+          if ! gh release view "$TAG" >/dev/null 2>&1; then
+            gh release create "$TAG" --draft --target main \
+              --title "${{ github.event.pull_request.title }}" \
+              --notes "Built from PR #${{ github.event.pull_request.number }}"
+          fi
+          gh release upload "$TAG" omletsmp_datapack.zip omletsmp_resourcepack.zip --clobber

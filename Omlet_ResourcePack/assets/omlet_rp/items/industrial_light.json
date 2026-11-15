@@ -1,0 +1,8 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "omlet_rp:block/industrial_lamp",
+    "tints": []
+  },
+  "hand_animation_on_swap": true
+}
