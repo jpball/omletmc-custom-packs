@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   release:
-    if: github.head_ref == 'develop'
+    if: github.head_ref == 'development'
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ github.token }}
@@ -25,11 +25,16 @@ jobs:
           (cd Omlet_Datapack && zip -r ../omletsmp_datapack.zip pack.mcmeta data)
           (cd Omlet_ResourcePack && zip -r ../omletsmp_resourcepack.zip pack.mcmeta pack.png assets)
 
+      - name: Read version
+        run: echo "TITLE=OmletSMP Packs v$(cat VERSION)" >> "$GITHUB_ENV"
+
       - name: Create or update release
         run: |
           if ! gh release view "$TAG" >/dev/null 2>&1; then
             gh release create "$TAG" --draft --target main \
-              --title "${{ github.event.pull_request.title }}" \
+              --title "$TITLE" \
               --notes "Built from PR #${{ github.event.pull_request.number }}"
+          else
+            gh release edit "$TAG" --title "$TITLE"
           fi
           gh release upload "$TAG" omletsmp_datapack.zip omletsmp_resourcepack.zip --clobber

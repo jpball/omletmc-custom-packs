@@ -31,7 +31,7 @@ The two packs are designed to be used together. The datapack adds the gameplay, 
 1. **Datapack:** copy the `Omlet_Datapack` folder (or a zip of it) into `<.minecraft>/saves/<World Name>/datapacks/`.
 2. **Resource pack:** copy the `Omlet_ResourcePack` folder (or a zip of it) into `<.minecraft>/resourcepacks/`, then enable it in *Options → Resource Packs*.
 3. **Restart the world.** Exit to the title screen and reopen it. A plain `/reload` is **not** enough the first time, because the flatworld dimension is only registered when the world loads. After that, `/reload` picks up changes to functions, recipes, predicates and so on.
-4. You should see **"Omlet Datapack loaded successfully!"** in light purple in chat, followed by the datapack version (e.g. `26.3_10.3`, set in `load.mcfunction`). If you don't, check `/datapack list` and the game log for errors. A single invalid JSON file can stop the whole datapack loading.
+4. You should see **"Omlet Datapack loaded successfully!"** in light purple in chat, followed by a version line (e.g. `26.3_10.3`, set by hand in `load.mcfunction`; see [Versioning](#versioning)). If you don't, check `/datapack list` and the game log for errors. A single invalid JSON file can stop the whole datapack loading.
 
 When creating a new world you can instead add the datapack from the *Data Packs* button on the world creation screen.
 
@@ -48,7 +48,13 @@ When creating a new world you can instead add the datapack from the *Data Packs*
 
 Locally built releases are kept in `versions/`. This folder is git-ignored, so new zips only exist on the machine that built them (the older `Omlet MC - Custom Packs v1.0.zip` was committed before the ignore rule). When zipping a pack yourself, `pack.mcmeta` must be at the **root** of the zip, not inside a subfolder.
 
-`.github/workflows/release.yml` builds release zips automatically. When a pull request into `main` is opened or updated **from the `develop` branch**, it zips both packs (`omletsmp_datapack.zip`, `omletsmp_resourcepack.zip`) and uploads them to a **draft** GitHub release tagged `pr-<PR number>`, replacing the zips on each push. Publish the draft by hand once the PR is merged.
+`.github/workflows/release.yml` builds release zips automatically. When a pull request into `main` is opened or updated **from the `development` branch**, it zips both packs (`omletsmp_datapack.zip`, `omletsmp_resourcepack.zip`) and uploads them to a **draft** GitHub release tagged `pr-<PR number>`, replacing the zips on each push. Publish the draft by hand once the PR is merged.
+
+### Versioning
+
+The release version lives in the `VERSION` file at the repo root: a single line such as `1.2.0`, with nothing else in the file. The release workflow reads it and names the draft release **"OmletSMP Packs v\<VERSION\>"**, e.g. "OmletSMP Packs v1.2.0". The title is updated on every push to the PR, so changing `VERSION` mid-PR renames the draft.
+
+**Bump `VERSION` on `development` before opening the PR into `main`.** The version line printed in chat on load (`- Current version no. …` in `load.mcfunction`) is separate, because a datapack can't read files outside `data/`. Update it by hand if you want the two to match.
 
 ### Developer install with `reload-files.sh`
 
@@ -190,13 +196,14 @@ For example, `/function omlet_dp:flatworld/return {targets:"@a", x:0, y:70, z:0}
 ├── Omlet_Datapack/            The datapack (namespace omlet_dp)
 ├── Omlet_ResourcePack/        The resource pack (namespace omlet_rp)
 ├── .github/workflows/
-│   └── release.yml            Builds draft release zips for PRs from develop into main
+│   └── release.yml            Builds draft release zips for PRs from development into main
 ├── docs/
 │   ├── DEVELOPER_GUIDE.md     This file
 │   └── screenshots/           Images used in the docs/README
 ├── raw_assets/                Blockbench source models (.bbmodel), not part of either pack
 ├── versions/                  Release zips (git-ignored)
 ├── README.md                  Player-facing feature summary
+├── VERSION                    Release version, used to name GitHub releases
 ├── reload-files.sh            Copies both packs into a test world
 ├── .env                       Local overrides for reload-files.sh (git-ignored)
 └── .gitignore                 Ignores versions/ and *.env
@@ -437,6 +444,7 @@ All paths below are relative to `Omlet_ResourcePack/`.
 - Prefix scoreboards and tags by feature, e.g. `omlet.gun_*` or `omlet.light_*`.
 - Update `README.md` (for players) and this guide (for developers) when adding a feature.
 - Add new debug and admin functions to `debug/help.mcfunction`.
+- Bump `VERSION` before each release PR into `main` (see [Versioning](#versioning)).
 
 ---
 
