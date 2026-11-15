@@ -1,0 +1,13 @@
+{
+  "criteria": {
+    "crafted": {
+      "trigger": "minecraft:recipe_crafted",
+      "conditions": {
+        "recipes": "omlet_dp:mustang"
+      }
+    }
+  },
+  "rewards": {
+    "function": "omlet_dp:car/crafted_mustang"
+  }
+}
