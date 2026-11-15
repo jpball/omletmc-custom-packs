@@ -1,6 +1,21 @@
 {
   "values": [
-    "#omlet_dp:car/passable",
+    "#minecraft:replaceable",
+    "#minecraft:flowers",
+    "#minecraft:saplings",
+    "#minecraft:buttons",
+    "#minecraft:rails",
+    "#minecraft:wall_signs",
+    "minecraft:torch",
+    "minecraft:wall_torch",
+    "minecraft:soul_torch",
+    "minecraft:soul_wall_torch",
+    "minecraft:redstone_torch",
+    "minecraft:redstone_wall_torch",
+    "minecraft:redstone_wire",
+    "minecraft:lever",
+    "minecraft:tripwire",
+    "minecraft:sugar_cane",
     "minecraft:cobweb",
     "minecraft:barrier"
   ]

@@ -34,12 +34,6 @@ For Minecraft Java 26.3. Install both packs together: the datapack adds the feat
     - Wear it in your chest slot, and another player can right-click your back to ride on your shoulders
     - Sneak to get off
 
-- Cars
-    - Place a car like an armor stand, right-click to get in and sneak to get out
-    - W/S to drive and reverse, A/D to steer, space for the handbrake and sprint for the horn
-    - Punch an empty car to pick it back up
-    - Cars are given out by admins
-
 - Trash Can Multiblock
     - Build a trash can to destroy any items put into it
     - Place a glow item frame holding a lava bucket on top of a barrel, with a redstone lamp beneath the barrel

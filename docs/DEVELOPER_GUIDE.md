@@ -6,7 +6,7 @@ This repository holds the datapack and resource pack for the Omlet Minecraft ser
 - **Datapack:** `Omlet_Datapack/` (namespace `omlet_dp`, pack formats 101–121)
 - **Resource pack:** `Omlet_ResourcePack/` (namespace `omlet_rp`, pack formats 72–97.1)
 
-The two packs are designed to be used together. The datapack adds the gameplay, and the resource pack supplies the sounds, textures and models that gameplay refers to. Without the resource pack the features still work, but custom paintings show the missing texture, custom sounds are silent, and the torch arrow, gun, cars, industrial light and player saddle show their base items (arrow, carrot on a stick, armor stand, item frame, leather chestplate) instead of their custom models.
+The two packs are designed to be used together. The datapack adds the gameplay, and the resource pack supplies the sounds, textures and models that gameplay refers to. Without the resource pack the features still work, but custom paintings show the missing texture, custom sounds are silent, and the torch arrow, gun, industrial light and player saddle show their base items (arrow, carrot on a stick, item frame, leather chestplate) instead of their custom models.
 
 ---
 
@@ -114,19 +114,6 @@ There are 23 custom paintings. They are all in the `minecraft:placeable` paintin
 - Get one with `/function omlet_dp:debug/give_gun`. It is a carrot on a stick tagged with `custom_data {omlet_gun:true}` and using the `omlet_rp:block_17` item model.
 - Right-click to fire. Holding right-click fires automatically, about 5 shots a second. Each shot is instant (hitscan) with a range of 64 blocks, deals 6 damage to the first mob or player it hits, and leaves a trail of crit particles.
 - Bullets pass through grass, flowers, torches and other non-solid blocks but stop at solid blocks. They ignore items, display entities, item frames and other non-mob entities.
-
-### Cars
-
-- **Getting a car:** cars can't currently be crafted (the Mustang recipe was removed). Admins can give one with `/loot give @s loot omlet_dp:car/mustang`, or run `/function omlet_dp:car/list` and click a car to spawn it where they're standing (`car/create {car:"<loot table>"}` does the same directly).
-- The Mustang item is an armor stand item whose `entity_data` tags the placed stand `omlet.car_new` and puts the car's name and model in its head slot. The stand is replaced by the car on the next tick.
-- Place it like an armor stand. It turns into a car facing away from you.
-- **Right-click** to get in (one driver per car), **sneak** to get out, **left-click** an empty car to pick it back up as an item.
-- **W** accelerates (top speed 14 blocks/s), **S** brakes then reverses, **A/D** steer while moving, **space** is the handbrake. With no pedal pressed the car coasts to a stop.
-- **Sounds** (all vanilla): an engine rumble while someone's driving that rises in pitch with speed, a door closing when you get in, a horn on the **sprint** key, and a skid when you handbrake at speed.
-- The car falls when there's nothing under it, climbs 1-block steps and stops at walls 2 blocks high. Collision is only checked at the car's centre, so the front and back of the model can go into walls.
-- **Model position, size and rotation** come from the model's `display.fixed` in the resource pack (e.g. `models/block/ford_mustang.json`), because cars are `item_display`s in `"fixed"` mode. `translation` is in pixels (16 = 1 block, max ±80), `rotation` in degrees, and `scale` is at most 4. It can be edited in Blockbench's Display tab under the item frame slot. Changes apply to every car, including ones already placed, as soon as the resource pack is reloaded (F3+T). To adjust one placed car on top of that, edit it directly, e.g. `/data merge entity @n[tag=omlet.car] {transformation:{scale:[1.5f,1.5f,1.5f]}}`.
-- **Crafting (currently disabled):** a recipe can't output a loot table, so crafting worked through a placeholder: `recipe/mustang.json` gave an armor stand tagged `custom_data {omlet_car_recipe:true}`, and the `car/crafted_mustang` advancement fired on crafting, cleared the placeholders and gave the same number of Mustangs from the loot table. The advancement and the `crafted_mustang` / `give_mustang` functions are still in place, so restoring `recipe/mustang.json` (with the id `omlet_dp:mustang`) turns crafting back on.
-- **Adding another car:** copy `loot_table/car/mustang.json` and change the name and `item_model` in both places (the item itself and the head item inside `entity_data`), then add a line for it to `car/list.mcfunction`. Set the new model's position and size in its `display.fixed`. To make it craftable, also add a recipe and copy the `car/crafted_mustang` advancement and the `crafted_mustang` / `give_mustang` functions, pointing them at the new recipe and loot table.
 
 ### Industrial light (flickering lamp)
 
@@ -292,11 +279,8 @@ All paths below are relative to `Omlet_Datapack/`.
 
 | File | Purpose |
 |---|---|
-| `init.mcfunction` | Creates the scoreboard, carries over the frequency from the old `omlet_dp.*` objectives and removes them, sets the default frequency (5) only if none is set, and records the current day so loading doesn't trigger a broadcast |
-| `tick.mcfunction` | Updates the current day each tick and calls `on_new_day` when it changes |
-| `query_day.mcfunction` | Stores `time query time ÷ 24000` in `#current omlet.day` |
-| `on_new_day.mcfunction` | Records the new day and broadcasts if `day % frequency == 0` |
-| `broadcast_day_count.mcfunction` | The chat message |
+| `init.mcfunction` | Creates the scoreboard, sets the default frequency (5) only if none is set, and clears `#last_day` so loading doesn't trigger a broadcast |
+| `tick.mcfunction` | Works out the day (`time query time ÷ 24000`). When it differs from `#last_day`, records it and broadcasts the chat message if `day % frequency == 0` |
 | `set_broadcast_frequency.mcfunction` | Macro `{new_freq}`, sets the broadcast interval in days |
 
 ### Paintings — `function/paintings/` and `painting_variant/`
@@ -340,33 +324,8 @@ All paths below are relative to `Omlet_Datapack/`.
 | `function/gun/shoot.mcfunction` | Plays the muzzle sound and smoke, then starts `ray` from the player's eyes |
 | `function/gun/ray.mcfunction` | Moves the bullet forward 0.25 blocks per step (recursive). Stops at a block not in `gun/passable` or inside an entity's hitbox |
 | `function/gun/hit_block.mcfunction` / `hit_entity.mcfunction` | Impact effects. `hit_entity` deals 6 `minecraft:arrow` damage credited to the shooter |
-| `tags/block/gun/passable.json` | Blocks bullets pass through: everything in `car/passable`, plus cobwebs and barriers |
+| `tags/block/gun/passable.json` | Blocks bullets pass through: replaceable blocks (air, water, grass…), flowers, saplings, torches, buttons, rails, signs and similar non-solid blocks, plus cobwebs and barriers |
 | `tags/entity_type/gun/not_targets.json` | Entities bullets pass through |
-
-### Cars — `function/car/`, `loot_table/car/` and `predicate/controls/`
-
-A car is one `item_display` (`omlet.car`) showing the model, with an `interaction` hitbox (`omlet.car_hitbox`) and a seat (`omlet.car_seat`) riding it. The seat is a zero-width `interaction`, so it can't be clicked, and the driver rides it. Riders sit at the top of an interaction, so the seat's `height` (set in `car/setup`, 0.55 for the Mustang, matching the seat cushion with its `display.fixed`) sets how high the driver sits; riding the item_display directly would put them at ground level. Display entities have no physics, so `drive` moves the car with `tp` and does its own gravity, step-up and wall checks against `tags/block/car/passable.json`. `teleport_duration:1` makes the movement look smooth.
-
-| File | Purpose |
-|---|---|
-| `function/car/init.mcfunction` | Creates the car scoreboards |
-| `function/car/tick.mcfunction` | Sets up newly placed cars, handles clicks on hitboxes, drives every car, and removes hitboxes left by a car killed some other way |
-| `function/car/list.mcfunction` | `/function omlet_dp:car/list`: prints every car as a clickable chat line that spawns it. **Add a line here when adding a car** |
-| `function/car/create.mcfunction` | Macro `{car}`: spawns the car from `loot_table/car/<car>` where the caller stands, through the same `setup` as placing the item |
-| `function/car/setup.mcfunction` | Replaces a placed armor stand with the car: an `item_display` (`"fixed"` mode, so the model's `display.fixed` applies) with the head item, facing away from the player, plus the hitbox and the seat |
-| `function/car/drive.mcfunction` | Reads the driver's keys (via `read_controls`), updates `omlet.car_speed`, plays the horn/skid/engine sounds, steers, applies gravity, then calls `move` |
-| `function/car/move.mcfunction` / `move_to.mcfunction` | Macro `{step}`: moves the car `step` blocks forward, stepping up 1 block or stopping at a wall |
-| `function/car/read_controls.mcfunction` | Runs as the driver: sets `#driver`, and `#throttle`, `#steer`, `#brake` and `#horn` from their keys |
-| `function/car/engine_sound.mcfunction` | Plays one engine note (`block.note_block.basedrum`), pitched by speed. Called every 2 ticks while a car has a driver |
-| `function/car/clicked.mcfunction` | Right-click: seats the player if the car has no driver |
-| `function/car/punched.mcfunction` / `pick_up.mcfunction` | Left-click on an empty car: drops the car item again and removes the car |
-| `loot_table/car/mustang.json` | The Mustang item |
-| `recipe/mustang.json` | **Removed.** Crafted a placeholder Mustang (custom_data `omlet_car_recipe:true`) |
-| `advancement/car/crafted_mustang.json` | `recipe_crafted` trigger for `omlet_dp:mustang`, runs `car/crafted_mustang`. Never fires while the recipe is removed |
-| `function/car/crafted_mustang.mcfunction` / `give_mustang.mcfunction` | Revokes the advancement, clears the player's placeholders and gives that many Mustangs from the loot table |
-| `predicate/controls/*.json` | Player input checks (forward, backward, left, right, `handbrake` = jump, `horn` = sprint) |
-| `predicate/car/in_car.json` | Matches entities riding an item_display; car hitboxes and seats without one are removed |
-| `tags/block/car/passable.json` | Blocks a car drives and falls through. `gun/passable` includes it |
 
 ### Industrial light — `function/flickeringlight/`
 
@@ -375,18 +334,16 @@ A lamp is an `item_display` and an `interaction`, both tagged `omlet.industrial_
 | File | Purpose |
 |---|---|
 | `recipe/industrial_light.json`, `loot_table/industrial_light.json` | The lamp item (an invisible fixed item frame tagged `omlet.industrial_light_placer`). The loot table is used to drop and give it; keep the two in sync |
-| `init.mcfunction` | Creates the light scoreboards |
+| `init.mcfunction` | Creates the `omlet.light_timer` scoreboard |
 | `tick.mcfunction` | Turns placed item frames into lamps, handles right-clicks and punches on hitboxes, and runs `lamp_tick` for every lamp |
-| `summon_light.mcfunction` | Run as a placed item frame: places the light block, summons the display (rotated from the frame's facing) and hitbox (a thin slab on floors and ceilings, a cube on walls), then removes the frame. Calls `cancel_place` if the space is taken |
-| `cancel_place.mcfunction` | Drops the item back and removes the frame |
-| `lamp_tick.mcfunction` | Breaks the lamp if its light block was replaced, otherwise counts down to the next flicker |
-| `next_flicker.mcfunction` | Waits 40–400 ticks before the next flicker |
-| `turn_off.mcfunction` / `turn_on.mcfunction` | One flicker: dark for 1–6 ticks, then back on, with a 50% chance of another flicker 2–8 ticks later |
-| `set_level.mcfunction` | Macro `{level}`: sets the light block's level, keeping it waterlogged if it was |
+| `summon_light.mcfunction` | Run as a placed item frame at its block centre: places the light block, summons the display (rotated from the frame's facing) and hitbox (a thin slab on floors and ceilings, a cube on walls), then removes the frame. If the space is taken it drops the item back instead |
+| `lamp_tick.mcfunction` | Breaks the lamp (dropping the item) if its light block was replaced, otherwise counts down and calls `light_off` / `light_on` |
+| `light_off.mcfunction` | Turns the lamp dark (light level 0, keeping any water) for 1–6 ticks. Used for flickers and for switching off |
+| `light_on.mcfunction` | Lights the lamp back up and sets the next flicker: 40–400 ticks away, or half the time 2–8 ticks, so flickers come in bursts. Used when a flicker ends and for switching on |
 | `use.mcfunction` | Right-click on a hitbox: toggles the lamp only if the player is sneaking (`predicate/is_sneaking.json`) |
-| `toggle.mcfunction`, `switch_off.mcfunction`, `switch_on.mcfunction` | Switches the lamp off (tag `omlet.light_disabled`) or back on |
-| `hit.mcfunction` | Punch on a hitbox: `remove` for creative players, `break` otherwise |
-| `break.mcfunction` / `remove.mcfunction` | `remove` restores air or water and kills the lamp's entities; `break` also drops the item |
+| `toggle.mcfunction` | Switches the lamp off (tag `omlet.light_disabled`, which stops the countdown) or back on |
+| `hit.mcfunction` | Punch on a hitbox: drops the item unless the player is in creative, then `remove` |
+| `remove.mcfunction` | Restores air or water and kills the lamp's entities |
 
 ### Player saddle — `function/player_saddle/`
 
@@ -489,8 +446,6 @@ All paths below are relative to `Omlet_ResourcePack/`.
 | `assets/omlet_rp/items/torch_arrow.json` | Item model for the torch arrow: the vanilla arrow with a torch model drawn over it |
 | `assets/omlet_rp/items/block_17.json` | Item model for the gun (`omlet_rp:block_17`) |
 | `assets/omlet_rp/models/item/block_17.json`, `textures/item/block_17_tex.png` | The gun's Blockbench model and texture |
-| `assets/omlet_rp/items/ford_mustang.json` | Item model for the Mustang car (`omlet_rp:ford_mustang`) |
-| `assets/omlet_rp/models/block/ford_mustang.json`, `textures/block/mustang_tex.png` | The Mustang's Blockbench model and texture |
 | `assets/omlet_rp/items/industrial_light.json`, `models/block/industrial_lamp.json`, `textures/block/industrial_lamp.png` | The industrial light's item model, Blockbench model and texture |
 | `assets/omlet_rp/items/player_saddle.json`, `models/item/player_saddle.json`, `textures/item/player_saddle.png` | The player saddle's item model, flat item model and texture |
 | `assets/omlet_rp/textures/painting/**/*.png` | One texture per painting variant, matching the datapack's `asset_id`s |
@@ -504,7 +459,7 @@ All paths below are relative to `Omlet_ResourcePack/`.
 
 | Objective | Holder | Meaning |
 |---|---|---|
-| `omlet.day` | fake players | `#current` and `#previous` (current and last seen day), `#frequency` (broadcast interval in days), `#ticks_per_day` (24000), `#mod` (`day % frequency`, temporary) |
+| `omlet.day` | fake players | `#day` (current day), `#last_day` (day seen on the previous tick), `#frequency` (broadcast interval in days), `#ticks_per_day` (24000), `#mod` (`day % frequency`, temporary) |
 | `omlet.portal` | fake players | `#travel_enabled` (1/0), and temporary values such as `#dest_y` and `#ok` |
 | `omlet.portal_x/y/z` | players | Position of the portal the player is travelling from |
 | `omlet.portal_dest` | players | 1 = going to the flatworld, 0 = going to the overworld |
@@ -514,11 +469,8 @@ All paths below are relative to `Omlet_ResourcePack/`.
 | `omlet.gun_used` | players | Right-clicks with a carrot on a stick since the last tick (`minecraft.used` stat) |
 | `omlet.gun_cooldown` | players | Ticks until the gun can fire again |
 | `omlet.gun` | fake players | `#steps` (bullet steps left), `#2` and `#mod`, temporary |
-| `omlet.car_speed` | car item_displays | Speed in hundredths of a block per tick, negative when reversing |
 | `omlet.light_timer` | lamp item_displays | Ticks until the lamp next flickers off or back on |
-| `omlet.light` | fake players | `#creative`, `#sneaking`, `#burst`, temporary |
 | `omlet.id` | players, saddle hitboxes and seats | Unique player id; hitboxes and seats carry their wearer's. `#next` (last id given out), `#id` and `#found`, temporary |
-| `omlet.car` | fake players | `#cycle` (counts 0–3 every tick, spaces out repeating sounds); `#throttle`, `#steer`, `#brake`, `#horn`, `#driver`, `#count` (cars still to give after crafting), temporary |
 
 **Entity tags**
 
@@ -531,21 +483,16 @@ All paths below are relative to `Omlet_ResourcePack/`.
 | `omlet.portal_cooldown` | player | Must step out of portal light before travelling again |
 | `omlet.portal_src`, `omlet.portal_dest`, `omlet.portal_candidate` | glow item frame | Temporary markers used inside a single function call |
 | `omlet.gun_shooter` | player | The player firing, only during a single shot |
-| `omlet.car_new` | armor stand | A car just placed, set up on the next tick |
-| `omlet.car`, `omlet.car_hitbox`, `omlet.car_seat` | item_display / interaction / interaction | A car, and the click hitbox and driver's seat riding it |
-| `omlet.car_this`, `omlet.car_drop`, `omlet.car_new_part`, `omlet.car_spawning` | various | Temporary, only during a single function call |
 | `omlet.industrial_light_placer` | item frame | A just-placed industrial light, turned into a lamp on the next tick |
 | `omlet.industrial_light` | item_display / interaction | A lamp's model and its hitbox |
-| `omlet.light_off` | lamp item_display | Currently in a flicker |
+| `omlet.light_off` | lamp item_display | Currently dark (in a flicker, or switched off) |
 | `omlet.light_disabled` | lamp item_display | Switched off by a player |
 | `omlet.saddle_hitbox`, `omlet.saddle_seat` | interaction / item_display | A player saddle's click hitbox and seat |
-| `omlet.stale`, `omlet.new_seat`, `omlet.new` | various | Temporary, only during a single tick or function call |
+| `omlet.stale`, `omlet.new_seat` | various | Temporary, only during a single tick or function call |
 
 **Storage**
 
 `omlet_dp:flatworld_portal` holds `axis.x` / `axis.z` (portal shape per axis, set in `init`), `args` (travel macro arguments) and `return` (X/Z for the return commands).
-
-`omlet_dp:car` holds `step`, the distance a car moves this tick (macro argument for `car/move`).
 
 ---
 
@@ -562,7 +509,7 @@ All paths below are relative to `Omlet_ResourcePack/`.
 
 - Each feature lives in its own folder with an `init` (called from `load.mcfunction`) and a `tick` (called from `tick.mcfunction`).
 - Start each function file with a comment saying who it runs **as** and **at**, and what arguments it takes if it's a macro.
-- Prefix scoreboards and tags by feature, e.g. `omlet.portal_*` or `omlet.car_*`.
+- Prefix scoreboards and tags by feature, e.g. `omlet.portal_*` or `omlet.gun_*`.
 - Update `README.md` (for players) and this guide (for developers) when adding a feature.
 
 ---
@@ -586,7 +533,3 @@ All paths below are relative to `Omlet_ResourcePack/`.
 
 - **Force-loading:** portal travel adds and then removes a force-load on the destination chunks. If an admin had force-loaded those exact chunks with `/forceload`, a trip will remove that force-load.
 - **Tall flatworld portals:** `travel/arrive` only looks for existing portals between Y −64 and 319, but the flatworld goes up to Y 2031. A flatworld portal built above Y 319 is never found as a destination, so trips from the overworld build a new portal at ground level instead of linking to it.
-
----
-## Credits
-[Ford Mustang Model](https://blockbenchworkshop.com/model/9greenworks/ford-mustang-65-69) by [9greenworks](https://blockbenchworkshop.com/creator/9greenworks) 
