@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "#": "minecraft:leather",
+    "-": "minecraft:saddle",
+    "o": "minecraft:leather_chestplate",
+    "_": "minecraft:end_rod"
+  },
+  "pattern": [
+    "#-#",
+    "#o#",
+    "#_#"
+  ],
+  "result": {
+    "id": "minecraft:leather_chestplate",
+    "count": 1,
+    "components": {
+      "minecraft:item_name": "Player Saddle",
+      "minecraft:item_model": "omlet_rp:player_saddle",
+      "minecraft:custom_data": { "player_saddle": true }
+    }
+  }
+}
